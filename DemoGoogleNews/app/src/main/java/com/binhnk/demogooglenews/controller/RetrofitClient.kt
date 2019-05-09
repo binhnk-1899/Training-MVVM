@@ -1,7 +1,6 @@
 package com.binhnk.demogooglenews.controller
 
-import com.binhnk.demogooglenews.listener.GerritAPI
-import com.binhnk.demogooglenews.models.Article
+import com.binhnk.demogooglenews.listener.APIService
 import com.binhnk.demogooglenews.models.News
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
@@ -24,7 +23,7 @@ class ConnectionController {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
-        val gerritAPI = retrofit.create(GerritAPI::class.java)
+        val gerritAPI = retrofit.create(APIService::class.java)
 
         val call = gerritAPI.loadArticles( "google-news", API_KEY)
         call.enqueue(mCallback)
