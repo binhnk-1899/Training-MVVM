@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Retrofit LiveData Room</string>
+    <string name="get_data">get data</string>
+    <string name="page_number">Page number (Default is 1)</string>
 </resources>
