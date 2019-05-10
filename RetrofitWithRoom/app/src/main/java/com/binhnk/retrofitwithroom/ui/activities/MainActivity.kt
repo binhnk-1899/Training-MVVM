@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -16,8 +17,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.client.ClientController
-import com.binhnk.retrofitwithroom.models.user.UsersResponse
+import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.models.user.UserResponse
+import com.binhnk.retrofitwithroom.room.UserDatabase
 import com.binhnk.retrofitwithroom.viewmodel.UserResponseViewModel
+import com.binhnk.retrofitwithroom.viewmodel.UserViewModel
 import retrofit2.Call
 import retrofit2.Response
 
@@ -29,11 +33,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rv_user: RecyclerView
     private lateinit var mAdapter: UserAdapter
 
+    private lateinit var tv_datum_dao_count: TextView
     private lateinit var edt_page_number: EditText
     private lateinit var btn_get_data: Button
 
     private var mUserResponseVM: UserResponseViewModel? = null
-
+    private var mUserVM: UserViewModel? = null
+    private var userDBRoom: UserDatabase? = null
     private var pageValue = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,28 +47,28 @@ class MainActivity : AppCompatActivity() {
         mContext = this@MainActivity
         setContentView(R.layout.activity_main)
 
-
         declareUserLiveData()
+        declareUserResponseLiveData()
+        declareDAOCountLiveData(mContext)
 
         initUI()
         declareUI()
         initAction()
 
-        startLoadUserData()
+        startLoadUserDataFromAPI()
     }
 
     /**
      * declare user live data
      */
     private fun declareUserLiveData() {
-        if (mUserResponseVM == null) {
-            mUserResponseVM = ViewModelProviders.of(this).get(UserResponseViewModel::class.java)
+        if (mUserVM == null) {
+            mUserVM = ViewModelProviders.of(this).get(UserViewModel::class.java)
         }
-        mUserResponseVM!!.userResponseLiveData.postValue(null)
-        mUserResponseVM!!.userResponseLiveData.observe(this, Observer<UsersResponse> {
+        mUserVM!!.userLiveData.observe(this, Observer<ArrayList<User>> {
             val newData = if (it != null) {
-                Log.e("Ahihi", "Size: ${it.data.size}")
-                it.data
+                Log.e("Ahihi", "Size: ${it.size}")
+                it
             } else {
                 Log.e("Ahihi", "Live Data null")
                 ArrayList()
@@ -72,11 +78,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * declare user response live data
+     */
+    private fun declareUserResponseLiveData() {
+        if (mUserResponseVM == null) {
+            mUserResponseVM = ViewModelProviders.of(this).get(UserResponseViewModel::class.java)
+        }
+        mUserResponseVM!!.userResponseLiveData.postValue(null)
+        mUserResponseVM!!.userResponseLiveData.observe(this, Observer<UserResponse> {
+            if (it != null) {
+                Log.e("Ahihi", "Size: ${it.users.size}")
+                it.setPageForUser()
+                mUserVM!!.userLiveData.postValue(it.users)
+            } else {
+                Log.e("Ahihi", "Live Data null")
+                Thread(Runnable {
+                    loadUserDataFromRoom(pageValue)
+                }).start()
+            }
+
+        })
+    }
+
+    /**
      * init UI
      */
     private fun initUI() {
         swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout)
         rv_user = findViewById(R.id.rv_user)
+        tv_datum_dao_count = findViewById(R.id.tv_datum_dao_count)
         edt_page_number = findViewById(R.id.edt_page_number)
         btn_get_data = findViewById(R.id.btn_get_data)
     }
@@ -85,19 +115,49 @@ class MainActivity : AppCompatActivity() {
      * declare UI
      */
     private fun declareUI() {
-        mAdapter = UserAdapter(mContext)
+        mAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
+            override fun onItemLongClicked(mUserClicked: User) {
+                Thread(Runnable {
+                    if (userDBRoom == null) {
+                        userDBRoom = UserDatabase.getInstance(mContext)
+                    }
+                }).start()
+            }
+
+            override fun onItemClicked(mUserClicked: User) {
+                Thread(Runnable {
+                    if (userDBRoom == null) {
+                        userDBRoom = UserDatabase.getInstance(mContext)
+                    }
+                    val tempUser = userDBRoom!!.userDAO().getUserByUserId(mUserClicked.id)
+                    val userExist = tempUser != null
+                    if (!userExist) {
+                        userDBRoom!!.userDAO().insertUser(mUserClicked)
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(mContext, "${tempUser!!.page}", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                }).start()
+
+            }
+        })
         rv_user.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
         rv_user.adapter = mAdapter
     }
 
+    /**
+     * init action
+     */
     private fun initAction() {
         swipe_refresh_layout.setOnRefreshListener {
-            startLoadUserData()
+            startLoadUserDataFromAPI()
         }
         btn_get_data.setOnClickListener {
             if (edt_page_number.text.toString() != "") {
                 pageValue = edt_page_number.text.toString().toInt()
-                startLoadUserData()
+                startLoadUserDataFromAPI()
             } else {
                 Toast.makeText(mContext, "Please enter page number", Toast.LENGTH_SHORT).show()
             }
@@ -105,9 +165,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * start load user data
+     * start load user users
      */
-    private fun startLoadUserData() {
+    private fun startLoadUserDataFromAPI() {
         Handler().post {
             if (!swipe_refresh_layout.isRefreshing) {
                 swipe_refresh_layout.isRefreshing = true
@@ -115,16 +175,16 @@ class MainActivity : AppCompatActivity() {
         }
         ClientController().requestGetListUser(
             pageValue,
-            object : retrofit2.Callback<UsersResponse> {
-                override fun onFailure(call: Call<UsersResponse>, t: Throwable) {
+            object : retrofit2.Callback<UserResponse> {
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     Toast.makeText(mContext, "Request failure", Toast.LENGTH_SHORT).show()
                     mUserResponseVM!!.userResponseLiveData.postValue(null)
                     swipe_refresh_layout.isRefreshing = false
                 }
 
                 override fun onResponse(
-                    call: Call<UsersResponse>,
-                    response: Response<UsersResponse>
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
                 ) {
                     if (response.isSuccessful) {
                         Toast.makeText(
@@ -146,5 +206,27 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    /**
+     * load user data from Room when API request failure
+     */
+    private fun loadUserDataFromRoom(page: Int) {
+        if (userDBRoom == null) {
+            userDBRoom = UserDatabase.getInstance(mContext)
+        }
+        mUserVM!!.userLiveData.postValue(ArrayList(userDBRoom!!.userDAO().getUsersByPage(page)))
+    }
+
+    /**
+     * declare datum DAO count live users
+     */
+    private fun declareDAOCountLiveData(context: Context) {
+        if (userDBRoom == null) {
+            userDBRoom = UserDatabase.getInstance(context)
+        }
+        userDBRoom!!.userDAO().getDataCount().observe(this, Observer<Int> {
+            tv_datum_dao_count.text = "$it"
+        })
     }
 }

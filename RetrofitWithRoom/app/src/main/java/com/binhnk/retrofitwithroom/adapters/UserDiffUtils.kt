@@ -1,11 +1,11 @@
 package com.binhnk.retrofitwithroom.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import com.binhnk.retrofitwithroom.models.user.Datum
+import com.binhnk.retrofitwithroom.models.user.User
 
 class UserDiffUtils(
-    private val oldLst: ArrayList<Datum>,
-    private val newLst: ArrayList<Datum>
+    private val oldLst: ArrayList<User>,
+    private val newLst: ArrayList<User>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
