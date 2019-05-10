@@ -19,5 +19,5 @@ class UsersResponse(
     var totalPages: Int,
     @SerializedName("data")
     @Expose
-    var data: List<Datum>
+    var data: ArrayList<Datum>
 )

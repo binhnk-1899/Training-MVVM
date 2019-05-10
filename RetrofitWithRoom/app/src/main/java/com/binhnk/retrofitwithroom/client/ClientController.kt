@@ -1,5 +1,6 @@
 package com.binhnk.retrofitwithroom.client
 
+import com.binhnk.retrofitwithroom.listeners.APICallback
 import com.binhnk.retrofitwithroom.models.user.UsersResponse
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
@@ -13,7 +14,7 @@ class ClientController {
         private var mRetrofit: Retrofit? = null
     }
 
-    fun requestGetListUser(mCallback: retrofit2.Callback<UsersResponse>) {
+    fun requestGetListUser(page: Int, mCallback: retrofit2.Callback<UsersResponse>) {
         if (mRetrofit == null) {
             val gson = GsonBuilder().setLenient().create()
             mRetrofit = Retrofit.Builder()
@@ -21,5 +22,9 @@ class ClientController {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         }
+
+        val call = mRetrofit!!.create(APICallback::class.java)
+            .getAllUsers("$page")
+        call.enqueue(mCallback)
     }
 }
