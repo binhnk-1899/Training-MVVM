@@ -20,6 +20,7 @@ import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.room.UserDatabase
+import com.binhnk.retrofitwithroom.ui.dialogs.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.viewmodel.UserResponseViewModel
 import com.binhnk.retrofitwithroom.viewmodel.UserViewModel
 import retrofit2.Call
@@ -117,11 +118,18 @@ class MainActivity : AppCompatActivity() {
     private fun declareUI() {
         mAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
             override fun onItemLongClicked(mUserClicked: User) {
-                Thread(Runnable {
-                    if (userDBRoom == null) {
-                        userDBRoom = UserDatabase.getInstance(mContext)
+                val mRemoveConfirmDialog = RemoveConfirmDialog(mContext, object : RemoveConfirmDialog.Callback {
+                    override fun onOkClicked() {
+                        Thread(Runnable {
+                            if (userDBRoom == null) {
+                                userDBRoom = UserDatabase.getInstance(mContext)
+                            }
+                            userDBRoom!!.userDAO().deleteUser(mUserClicked)
+                        }).start()
                     }
-                }).start()
+
+                })
+                mRemoveConfirmDialog.show()
             }
 
             override fun onItemClicked(mUserClicked: User) {
@@ -135,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                         userDBRoom!!.userDAO().insertUser(mUserClicked)
                     } else {
                         runOnUiThread {
-                            Toast.makeText(mContext, "${tempUser!!.page}", Toast.LENGTH_SHORT)
+                            Toast.makeText(mContext, "User has been storage in database", Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }

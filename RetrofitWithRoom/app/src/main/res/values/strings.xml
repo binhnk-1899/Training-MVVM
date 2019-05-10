@@ -2,4 +2,5 @@
     <string name="app_name">Retrofit LiveData Room</string>
     <string name="get_data">get data</string>
     <string name="page_number">Page number (Default is 1)</string>
+    <string name="do_you_want_to_remove_this_user_from_database">Do you want to remove this user from database?</string>
 </resources>
