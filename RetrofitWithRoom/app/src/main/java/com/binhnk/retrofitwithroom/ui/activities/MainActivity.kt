@@ -121,17 +121,18 @@ class MainActivity : AppCompatActivity() {
     private fun declareUI() {
         mAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
             override fun onItemLongClicked(mUserClicked: User) {
-                val mRemoveConfirmDialog = RemoveConfirmDialog(mContext, object : RemoveConfirmDialog.Callback {
-                    override fun onOkClicked() {
-                        Thread(Runnable {
-                            if (userDBRoom == null) {
-                                userDBRoom = UserDatabase.getInstance(mContext)
-                            }
-                            userDBRoom!!.userDAO().deleteUser(mUserClicked)
-                        }).start()
-                    }
+                val mRemoveConfirmDialog =
+                    RemoveConfirmDialog(mContext, object : RemoveConfirmDialog.Callback {
+                        override fun onOkClicked() {
+                            Thread(Runnable {
+                                if (userDBRoom == null) {
+                                    userDBRoom = UserDatabase.getInstance(mContext)
+                                }
+                                userDBRoom!!.userDAO().deleteUser(mUserClicked)
+                            }).start()
+                        }
 
-                })
+                    })
                 mRemoveConfirmDialog.show()
             }
 
@@ -146,7 +147,11 @@ class MainActivity : AppCompatActivity() {
                         userDBRoom!!.userDAO().insertUser(mUserClicked)
                     } else {
                         runOnUiThread {
-                            Toast.makeText(mContext, "User has been storage in database", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                mContext,
+                                "User has been storage in database",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                     }
@@ -175,9 +180,16 @@ class MainActivity : AppCompatActivity() {
         }
         btn_post_user.setOnClickListener {
             val mPostUserDialog = PostNewUserDialog(mContext, object : PostNewUserDialog.Callback {
-                override fun onSubmit(id: String, page: String, firstName: String, secondName: String, email: String) {
-                    Toast.makeText(mContext, "$firstName $secondName $email", Toast.LENGTH_SHORT).show()
-                    addNewUser(id, page, firstName, secondName, email)
+                override fun onSubmit(
+                    id: String,
+                    page: String,
+                    firstName: String,
+                    secondName: String,
+                    email: String
+                ) {
+                    Toast.makeText(mContext, "$firstName $secondName $email", Toast.LENGTH_SHORT)
+                        .show()
+                    addNewUser(firstName, secondName, email)
                 }
 
             })
@@ -188,7 +200,16 @@ class MainActivity : AppCompatActivity() {
     /**
      * add new user
      */
-    private fun addNewUser(id: String, page: String, firstName: String, secondName: String, email: String) {
+    private fun addNewUser(
+        firstName: String,
+        secondName: String,
+        email: String
+    ) {
+        val string = "Post{" +
+                "email='" + email + '\'' +
+                ", first_name='" + firstName + '\'' +
+                ", last_name=" + secondName +
+                '}'
 
     }
 

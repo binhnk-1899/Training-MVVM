@@ -10,8 +10,10 @@ import android.widget.EditText
 import android.widget.TextView
 import com.binhnk.retrofitwithroom.R
 
-class PostNewUserDialog(context: Context,
-                        private val mCallback: Callback) : Dialog(context) {
+class PostNewUserDialog(
+    context: Context,
+    private val mCallback: Callback
+) : Dialog(context) {
 
     private lateinit var edt_id: EditText
     private lateinit var edt_page: EditText
@@ -52,23 +54,21 @@ class PostNewUserDialog(context: Context,
             dismiss()
         }
         tv_submit.setOnClickListener {
-            if (edt_id.text.toString() != ""
-                    && edt_page.text.toString() != ""
-                    && edt_first_name.text.toString() != ""
-                    && edt_second_name.text.toString() != ""
-                    && edt_email.text.toString() != ""
+            if (edt_first_name.text.toString() != ""
+                && edt_second_name.text.toString() != ""
+                && edt_email.text.toString() != ""
             ) {
                 dismiss()
-                mCallback.onSubmit(edt_id.text.toString(),
-                        edt_page.text.toString(),
-                        edt_first_name.text.toString(),
-                        edt_second_name.text.toString(),
-                        edt_email.text.toString())
+                mCallback.onSubmit(
+                    edt_first_name.text.toString(),
+                    edt_second_name.text.toString(),
+                    edt_email.text.toString()
+                )
             }
         }
     }
 
     interface Callback {
-        fun onSubmit(id: String, page: String, firstName: String, secondName: String, email: String)
+        fun onSubmit(firstName: String, secondName: String, email: String)
     }
 }
