@@ -32,7 +32,6 @@ class ClientController {
     fun postUser(
         name: String,
         job: String,
-        id: String,
         mCallback: retrofit2.Callback<UserCreated>
     ) {
         if (mRetrofit == null) {
@@ -46,8 +45,7 @@ class ClientController {
         val call = mRetrofit!!.create(APICallback::class.java)
             .postUser(
                 name,
-                job,
-                id
+                job
             )
         call.enqueue(mCallback)
     }

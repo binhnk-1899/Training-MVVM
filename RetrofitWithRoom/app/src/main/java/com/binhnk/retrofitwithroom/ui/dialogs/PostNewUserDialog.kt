@@ -50,21 +50,19 @@ class PostNewUserDialog(
             dismiss()
         }
         tv_submit.setOnClickListener {
-            if (edt_id.text.toString() != ""
-                && edt_job.text.toString() != ""
+            if (edt_job.text.toString() != ""
                 && edt_name.text.toString() != ""
             ) {
                 dismiss()
                 mCallback.onSubmit(
                     edt_name.text.toString(),
-                    edt_job.text.toString(),
-                    edt_id.text.toString()
+                    edt_job.text.toString()
                 )
             }
         }
     }
 
     interface Callback {
-        fun onSubmit(name: String, job: String, id: String)
+        fun onSubmit(name: String, job: String)
     }
 }

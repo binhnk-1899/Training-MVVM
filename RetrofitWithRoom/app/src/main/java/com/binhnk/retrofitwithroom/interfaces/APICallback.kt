@@ -11,11 +11,10 @@ interface APICallback {
     @GET("api/users")
     fun getAllUsers(@Query("page") page: String): Call<UserResponse>
 
-    @POST("/posts")
+    @POST("api/users")
     @FormUrlEncoded
     fun postUser(
         @Field("name") title: String,
-        @Field("job") body: String,
-        @Field("id") userId: String
+        @Field("job") body: String
     ): Call<UserCreated>
 }

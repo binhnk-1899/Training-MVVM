@@ -183,12 +183,9 @@ class MainActivity : AppCompatActivity() {
             val mPostUserDialog = PostNewUserDialog(mContext, object : PostNewUserDialog.Callback {
                 override fun onSubmit(
                     name: String,
-                    job: String,
-                    id: String
+                    job: String
                 ) {
-                    Toast.makeText(mContext, "$name $job $id", Toast.LENGTH_SHORT)
-                        .show()
-                    addNewUser(name, job, id)
+                    addNewUser(name, job)
                 }
 
             })
@@ -201,10 +198,9 @@ class MainActivity : AppCompatActivity() {
      */
     private fun addNewUser(
         name: String,
-        job: String,
-        id: String
+        job: String
     ) {
-       ClientController().postUser(name, job, id, object : retrofit2.Callback<UserCreated> {
+       ClientController().postUser(name, job, object : retrofit2.Callback<UserCreated> {
            override fun onFailure(call: Call<UserCreated>, t: Throwable) {
                Toast.makeText(mContext, "Failure", Toast.LENGTH_SHORT).show()
            }
