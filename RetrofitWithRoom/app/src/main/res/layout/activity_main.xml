@@ -20,7 +20,7 @@
             android:layout_gravity="center_vertical"
             android:text="@string/app_name"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/_13sdp" />
+            android:textSize="@dimen/_12sdp" />
 
         <TextView
             android:id="@+id/tv_datum_dao_count"
@@ -28,18 +28,35 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/_13sdp" />
+            android:textSize="@dimen/_12sdp" />
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/btn_post_user"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginEnd="@dimen/_14sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
+            android:background="@drawable/bg_button"
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:text="@string/add_new_user"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12sdp" />
+
         <RelativeLayout
             android:id="@+id/layout_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/btn_post_user"
             android:layout_margin="@dimen/_14sdp">
 
             <Button
@@ -53,7 +70,7 @@
                 android:paddingEnd="@dimen/_12sdp"
                 android:text="@string/get_data"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_12sdp" />
 
             <EditText
                 android:id="@+id/edt_page_number"
@@ -72,7 +89,7 @@
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="1"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_12sdp" />
         </RelativeLayout>
 
         <FrameLayout

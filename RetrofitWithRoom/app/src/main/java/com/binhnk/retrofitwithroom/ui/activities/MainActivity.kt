@@ -20,6 +20,7 @@ import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.room.UserDatabase
+import com.binhnk.retrofitwithroom.ui.dialogs.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.dialogs.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.viewmodel.UserResponseViewModel
 import com.binhnk.retrofitwithroom.viewmodel.UserViewModel
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tv_datum_dao_count: TextView
     private lateinit var edt_page_number: EditText
     private lateinit var btn_get_data: Button
+    private lateinit var btn_post_user: Button
 
     private var mUserResponseVM: UserResponseViewModel? = null
     private var mUserVM: UserViewModel? = null
@@ -110,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         tv_datum_dao_count = findViewById(R.id.tv_datum_dao_count)
         edt_page_number = findViewById(R.id.edt_page_number)
         btn_get_data = findViewById(R.id.btn_get_data)
+        btn_post_user = findViewById(R.id.btn_post_user)
     }
 
     /**
@@ -170,6 +173,23 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(mContext, "Please enter page number", Toast.LENGTH_SHORT).show()
             }
         }
+        btn_post_user.setOnClickListener {
+            val mPostUserDialog = PostNewUserDialog(mContext, object : PostNewUserDialog.Callback {
+                override fun onSubmit(id: String, page: String, firstName: String, secondName: String, email: String) {
+                    Toast.makeText(mContext, "$firstName $secondName $email", Toast.LENGTH_SHORT).show()
+                    addNewUser(id, page, firstName, secondName, email)
+                }
+
+            })
+            mPostUserDialog.show()
+        }
+    }
+
+    /**
+     * add new user
+     */
+    private fun addNewUser(id: String, page: String, firstName: String, secondName: String, email: String) {
+
     }
 
     /**

@@ -21,9 +21,6 @@ interface UserDAO {
     @Insert
     fun insertUser(vararg users: User)
 
-//    @Query
-//    fun checkUser(vararg users: User)
-
     @Delete
     fun deleteUser(user: User)
 
