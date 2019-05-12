@@ -13,9 +13,9 @@ interface APICallback {
 
     @POST("/posts")
     @FormUrlEncoded
-    fun savePost(
+    fun postUser(
         @Field("name") title: String,
         @Field("job") body: String,
-        @Field("id") userId: Long
+        @Field("id") userId: String
     ): Call<UserCreated>
 }

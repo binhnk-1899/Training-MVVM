@@ -16,10 +16,8 @@ class PostNewUserDialog(
 ) : Dialog(context) {
 
     private lateinit var edt_id: EditText
-    private lateinit var edt_page: EditText
-    private lateinit var edt_first_name: EditText
-    private lateinit var edt_second_name: EditText
-    private lateinit var edt_email: EditText
+    private lateinit var edt_job: EditText
+    private lateinit var edt_name: EditText
 
     private lateinit var tv_cancel: TextView
     private lateinit var tv_submit: TextView
@@ -37,10 +35,8 @@ class PostNewUserDialog(
 
     private fun initUI() {
         edt_id = findViewById(R.id.edt_id)
-        edt_page = findViewById(R.id.edt_page)
-        edt_first_name = findViewById(R.id.edt_first_name)
-        edt_second_name = findViewById(R.id.edt_second_name)
-        edt_email = findViewById(R.id.edt_email)
+        edt_job = findViewById(R.id.edt_job)
+        edt_name = findViewById(R.id.edt_name)
         tv_cancel = findViewById(R.id.tv_cancel)
         tv_submit = findViewById(R.id.tv_submit)
     }
@@ -54,21 +50,21 @@ class PostNewUserDialog(
             dismiss()
         }
         tv_submit.setOnClickListener {
-            if (edt_first_name.text.toString() != ""
-                && edt_second_name.text.toString() != ""
-                && edt_email.text.toString() != ""
+            if (edt_id.text.toString() != ""
+                && edt_job.text.toString() != ""
+                && edt_name.text.toString() != ""
             ) {
                 dismiss()
                 mCallback.onSubmit(
-                    edt_first_name.text.toString(),
-                    edt_second_name.text.toString(),
-                    edt_email.text.toString()
+                    edt_name.text.toString(),
+                    edt_job.text.toString(),
+                    edt_id.text.toString()
                 )
             }
         }
     }
 
     interface Callback {
-        fun onSubmit(firstName: String, secondName: String, email: String)
+        fun onSubmit(name: String, job: String, id: String)
     }
 }

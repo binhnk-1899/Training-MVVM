@@ -18,6 +18,7 @@ import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.models.user.UserCreated
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.room.UserDatabase
 import com.binhnk.retrofitwithroom.ui.dialogs.PostNewUserDialog
@@ -181,15 +182,13 @@ class MainActivity : AppCompatActivity() {
         btn_post_user.setOnClickListener {
             val mPostUserDialog = PostNewUserDialog(mContext, object : PostNewUserDialog.Callback {
                 override fun onSubmit(
-                    id: String,
-                    page: String,
-                    firstName: String,
-                    secondName: String,
-                    email: String
+                    name: String,
+                    job: String,
+                    id: String
                 ) {
-                    Toast.makeText(mContext, "$firstName $secondName $email", Toast.LENGTH_SHORT)
+                    Toast.makeText(mContext, "$name $job $id", Toast.LENGTH_SHORT)
                         .show()
-                    addNewUser(firstName, secondName, email)
+                    addNewUser(name, job, id)
                 }
 
             })
@@ -201,16 +200,24 @@ class MainActivity : AppCompatActivity() {
      * add new user
      */
     private fun addNewUser(
-        firstName: String,
-        secondName: String,
-        email: String
+        name: String,
+        job: String,
+        id: String
     ) {
-        val string = "Post{" +
-                "email='" + email + '\'' +
-                ", first_name='" + firstName + '\'' +
-                ", last_name=" + secondName +
-                '}'
+       ClientController().postUser(name, job, id, object : retrofit2.Callback<UserCreated> {
+           override fun onFailure(call: Call<UserCreated>, t: Throwable) {
+               Toast.makeText(mContext, "Failure", Toast.LENGTH_SHORT).show()
+           }
 
+           override fun onResponse(call: Call<UserCreated>, response: Response<UserCreated>) {
+               if (response.isSuccessful) {
+                   Toast.makeText(mContext, "Response success: ${response.body().toString()}", Toast.LENGTH_SHORT).show()
+               } else {
+                   Toast.makeText(mContext, "Response not success", Toast.LENGTH_SHORT).show()
+               }
+           }
+
+       })
     }
 
     /**
