@@ -21,6 +21,7 @@ import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserCreated
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.room.UserDatabase
+import com.binhnk.retrofitwithroom.ui.dialogs.AddNewUserSuccessDialog
 import com.binhnk.retrofitwithroom.ui.dialogs.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.dialogs.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.viewmodel.UserResponseViewModel
@@ -200,20 +201,21 @@ class MainActivity : AppCompatActivity() {
         name: String,
         job: String
     ) {
-       ClientController().postUser(name, job, object : retrofit2.Callback<UserCreated> {
-           override fun onFailure(call: Call<UserCreated>, t: Throwable) {
-               Toast.makeText(mContext, "Failure", Toast.LENGTH_SHORT).show()
-           }
+        ClientController().postUser(name, job, object : retrofit2.Callback<UserCreated> {
+            override fun onFailure(call: Call<UserCreated>, t: Throwable) {
+                Toast.makeText(mContext, "Failure", Toast.LENGTH_SHORT).show()
+            }
 
-           override fun onResponse(call: Call<UserCreated>, response: Response<UserCreated>) {
-               if (response.isSuccessful) {
-                   Toast.makeText(mContext, "Response success: ${response.body().toString()}", Toast.LENGTH_SHORT).show()
-               } else {
-                   Toast.makeText(mContext, "Response not success", Toast.LENGTH_SHORT).show()
-               }
-           }
+            override fun onResponse(call: Call<UserCreated>, response: Response<UserCreated>) {
+                if (response.isSuccessful) {
+                    val mSuccessDialog = AddNewUserSuccessDialog(mContext, response.body()!!)
+                    mSuccessDialog.show()
+                } else {
+                    Toast.makeText(mContext, "Response not success", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-       })
+        })
     }
 
     /**

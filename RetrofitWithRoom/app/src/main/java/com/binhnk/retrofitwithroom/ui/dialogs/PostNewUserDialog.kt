@@ -15,7 +15,6 @@ class PostNewUserDialog(
     private val mCallback: Callback
 ) : Dialog(context) {
 
-    private lateinit var edt_id: EditText
     private lateinit var edt_job: EditText
     private lateinit var edt_name: EditText
 
@@ -34,7 +33,6 @@ class PostNewUserDialog(
     }
 
     private fun initUI() {
-        edt_id = findViewById(R.id.edt_id)
         edt_job = findViewById(R.id.edt_job)
         edt_name = findViewById(R.id.edt_name)
         tv_cancel = findViewById(R.id.tv_cancel)

@@ -5,4 +5,9 @@
     <string name="do_you_want_to_remove_this_user_from_database">Do you want to remove this user from database?</string>
     <string name="add_new_user">Add new user</string>
     <string name="submit">Submit</string>
+    <string name="user_id">User ID: %s</string>
+    <string name="job">Job: %s</string>
+    <string name="name">Name: %s</string>
+    <string name="created_at">Created at: %s</string>
+    <string name="upload_new_user_success">Upload new user success</string>
 </resources>
