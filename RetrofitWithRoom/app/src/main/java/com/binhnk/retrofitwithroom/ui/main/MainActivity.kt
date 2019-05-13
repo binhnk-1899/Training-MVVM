@@ -1,11 +1,10 @@
-package com.binhnk.retrofitwithroom.ui.activities
+package com.binhnk.retrofitwithroom.ui.main
 
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.client.ClientController
+import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserCreated
 import com.binhnk.retrofitwithroom.models.user.UserResponse
@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mContext: Context
 
     // UI
-    private lateinit var swipe_refresh_layout: SwipeRefreshLayout
-    private lateinit var rv_user: RecyclerView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var rvUser: RecyclerView
     private lateinit var mAdapter: UserAdapter
 
-    private lateinit var tv_datum_dao_count: TextView
-    private lateinit var btn_get_data: Button
-    private lateinit var btn_post_user: Button
+    private lateinit var tvUserRoomCount: TextView
+    private lateinit var btnGetData: Button
+    private lateinit var btnPostUser: Button
 
     private var mUserResponseVM: UserResponseViewModel? = null
     private var mUserVM: UserViewModel? = null
@@ -51,19 +51,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this@MainActivity
-        val dataBinding =
-            DataBindingUtil.setContentView<com.binhnk.retrofitwithroom.databinding.ActivityMainBinding>(
-                this,
-                R.layout.activity_main
-            )
-        dataBinding.page = pageValue.toString()
+
+        val bindingViewModel = ViewModelProviders.of(this).get(BindingViewModel::class.java)
+
+        DataBindingUtil.setContentView<ActivityMainBinding>(
+            this,
+            R.layout.activity_main
+        ).apply {
+            this.lifecycleOwner = this@MainActivity
+            this.viewModel = bindingViewModel
+        }
 
 //        declareUserLiveData()
 //        declareUserResponseLiveData()
 //        declareDAOCountLiveData(mContext)
 
-//        initUI()
-//        declareUI()
+        initUI()
+        declareAdapter()
+
+        bindingViewModel.userLiveData.observe(this, Observer {
+            mAdapter.updateAdapter(it!!)
+        })
+//        declareAdapter()
 //        initAction()
 //
 //        startLoadUserDataFromAPI()
@@ -115,17 +124,17 @@ class MainActivity : AppCompatActivity() {
      * init UI
      */
     private fun initUI() {
-        swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout)
-        rv_user = findViewById(R.id.rv_user)
-        tv_datum_dao_count = findViewById(R.id.tv_datum_dao_count)
-        btn_get_data = findViewById(R.id.btn_get_data)
-        btn_post_user = findViewById(R.id.btn_post_user)
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        rvUser = findViewById(R.id.rv_user)
+        tvUserRoomCount = findViewById(R.id.tv_datum_dao_count)
+        btnGetData = findViewById(R.id.btn_get_data)
+        btnPostUser = findViewById(R.id.btn_post_user)
     }
 
     /**
-     * declare UI
+     * declare adapter
      */
-    private fun declareUI() {
+    private fun declareAdapter() {
         mAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
             override fun onItemLongClicked(mUserClicked: User) {
                 val mRemoveConfirmDialog =
@@ -166,18 +175,18 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-        rv_user.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
-        rv_user.adapter = mAdapter
+        rvUser.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+        rvUser.adapter = mAdapter
     }
 
     /**
      * init action
      */
     private fun initAction() {
-        swipe_refresh_layout.setOnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             startLoadUserDataFromAPI()
         }
-        btn_get_data.setOnClickListener {
+        btnGetData.setOnClickListener {
             if (edt_page_number.text.toString() != "") {
                 pageValue = edt_page_number.text.toString().toInt()
                 startLoadUserDataFromAPI()
@@ -185,7 +194,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(mContext, "Please enter page number", Toast.LENGTH_SHORT).show()
             }
         }
-        btn_post_user.setOnClickListener {
+        btnPostUser.setOnClickListener {
             val mPostUserDialog = PostNewUserDialog(mContext, object : PostNewUserDialog.Callback {
                 override fun onSubmit(
                     name: String,
@@ -224,12 +233,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * start load user users
+     * start load user userLiveData
      */
     private fun startLoadUserDataFromAPI() {
         Handler().post {
-            if (!swipe_refresh_layout.isRefreshing) {
-                swipe_refresh_layout.isRefreshing = true
+            if (!swipeRefreshLayout.isRefreshing) {
+                swipeRefreshLayout.isRefreshing = true
             }
         }
         ClientController().requestGetListUser(
@@ -238,7 +247,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     Toast.makeText(mContext, "Request failure", Toast.LENGTH_SHORT).show()
                     mUserResponseVM!!.userResponseLiveData.postValue(null)
-                    swipe_refresh_layout.isRefreshing = false
+                    swipeRefreshLayout.isRefreshing = false
                 }
 
                 override fun onResponse(
@@ -261,7 +270,7 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                         mUserResponseVM!!.userResponseLiveData.postValue(null)
                     }
-                    swipe_refresh_layout.isRefreshing = false
+                    swipeRefreshLayout.isRefreshing = false
                 }
 
             })
@@ -278,14 +287,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * declare datum DAO count live users
+     * declare datum DAO count live userLiveData
      */
     private fun declareDAOCountLiveData(context: Context) {
         if (userDBRoom == null) {
             userDBRoom = UserDatabase.getInstance(context)
         }
         userDBRoom!!.userDAO().getDataCount().observe(this, Observer<Int> {
-            tv_datum_dao_count.text = "$it"
+            tvUserRoomCount.text = "$it"
         })
     }
 }

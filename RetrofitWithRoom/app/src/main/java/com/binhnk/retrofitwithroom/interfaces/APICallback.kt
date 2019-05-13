@@ -8,10 +8,10 @@ import retrofit2.http.*
 
 
 interface APICallback {
-    @GET("api/users")
+    @GET("api/userLiveData")
     fun getAllUsers(@Query("page") page: String): Call<UserResponse>
 
-    @POST("api/users")
+    @POST("api/userLiveData")
     @FormUrlEncoded
     fun postUser(
         @Field("name") title: String,

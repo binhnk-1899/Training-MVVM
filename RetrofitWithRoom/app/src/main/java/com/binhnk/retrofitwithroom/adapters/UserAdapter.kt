@@ -15,8 +15,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 class UserAdapter(
     private val mContext: Context,
     private val mCallback: Callback
-) :
-    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+) : RecyclerView.Adapter<UserAdapter.UserViewHolder>(), BindableAdapter<ArrayList<User>> {
+    override fun setData(data: ArrayList<User>) {
+        updateAdapter(data)
+    }
 
     private val dataList: ArrayList<User> = ArrayList()
 
@@ -55,7 +57,7 @@ class UserAdapter(
     }
 
     /**
-     * update new users for adapter
+     * update new userLiveData for adapter
      */
     fun updateAdapter(mNewLst: ArrayList<User>) {
         val callback = DiffUtil.calculateDiff(UserDiffUtils(dataList, mNewLst))
