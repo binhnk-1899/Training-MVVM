@@ -13,11 +13,16 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -31,7 +36,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    implementation 'androidx.core:core:1.0.1'
+    implementation 'androidx.core:core:1.0.2'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
@@ -40,7 +45,7 @@ dependencies {
 
     // JSON Parsing
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 

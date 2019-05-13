@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ import com.binhnk.retrofitwithroom.ui.dialogs.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.dialogs.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.viewmodel.UserResponseViewModel
 import com.binhnk.retrofitwithroom.viewmodel.UserViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -38,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAdapter: UserAdapter
 
     private lateinit var tv_datum_dao_count: TextView
-    private lateinit var edt_page_number: EditText
     private lateinit var btn_get_data: Button
     private lateinit var btn_post_user: Button
 
@@ -50,17 +51,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this@MainActivity
-        setContentView(R.layout.activity_main)
+        val dataBinding =
+            DataBindingUtil.setContentView<com.binhnk.retrofitwithroom.databinding.ActivityMainBinding>(
+                this,
+                R.layout.activity_main
+            )
+        dataBinding.page = pageValue.toString()
 
-        declareUserLiveData()
-        declareUserResponseLiveData()
-        declareDAOCountLiveData(mContext)
+//        declareUserLiveData()
+//        declareUserResponseLiveData()
+//        declareDAOCountLiveData(mContext)
 
-        initUI()
-        declareUI()
-        initAction()
-
-        startLoadUserDataFromAPI()
+//        initUI()
+//        declareUI()
+//        initAction()
+//
+//        startLoadUserDataFromAPI()
     }
 
     /**
@@ -112,7 +118,6 @@ class MainActivity : AppCompatActivity() {
         swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout)
         rv_user = findViewById(R.id.rv_user)
         tv_datum_dao_count = findViewById(R.id.tv_datum_dao_count)
-        edt_page_number = findViewById(R.id.edt_page_number)
         btn_get_data = findViewById(R.id.btn_get_data)
         btn_post_user = findViewById(R.id.btn_post_user)
     }

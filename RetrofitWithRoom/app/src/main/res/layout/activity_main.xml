@@ -1,112 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
     tools:context=".ui.activities.MainActivity">
 
-    <FrameLayout
+    <data>
+
+        <variable
+            name="page"
+            type="String" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:background="@color/colorPrimary"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingEnd="@dimen/_14sdp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/_12sdp" />
-
-        <TextView
-            android:id="@+id/tv_datum_dao_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/_12sdp" />
-    </FrameLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/btn_post_user"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_32sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginEnd="@dimen/_14sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:background="@drawable/bg_button"
-            android:paddingStart="@dimen/_12sdp"
-            android:paddingEnd="@dimen/_12sdp"
-            android:text="@string/add_new_user"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/_12sdp" />
-
-        <RelativeLayout
-            android:id="@+id/layout_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/btn_post_user"
-            android:layout_margin="@dimen/_14sdp">
-
-            <Button
-                android:id="@+id/btn_get_data"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_button"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingEnd="@dimen/_12sdp"
-                android:text="@string/get_data"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp" />
-
-            <EditText
-                android:id="@+id/edt_page_number"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/_14sdp"
-                android:layout_toStartOf="@id/btn_get_data"
-                android:background="@drawable/bg_edit_text"
-                android:gravity="center_vertical"
-                android:hint="@string/page_number"
-                android:inputType="numberDecimal"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingTop="@dimen/_6sdp"
-                android:paddingEnd="@dimen/_12sdp"
-                android:paddingBottom="@dimen/_6sdp"
-                android:text="1"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/_12sdp" />
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/layout_bottom">
+            android:layout_height="@dimen/_50sdp"
+            android:background="@color/colorPrimary"
+            android:paddingStart="@dimen/_14sdp"
+            android:paddingEnd="@dimen/_14sdp">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_12sdp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <TextView
+                android:id="@+id/tv_datum_dao_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_12sdp" />
         </FrameLayout>
-    </RelativeLayout>
-</LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_post_user"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_32sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:background="@drawable/bg_button"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:text="@string/add_new_user"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_12sdp" />
+
+            <RelativeLayout
+                android:id="@+id/layout_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/btn_post_user"
+                android:layout_margin="@dimen/_14sdp">
+
+                <Button
+                    android:id="@+id/btn_get_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_button"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    android:text="@string/get_data"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+                <EditText
+                    android:id="@+id/edt_page_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_14sdp"
+                    android:layout_toStartOf="@id/btn_get_data"
+                    android:background="@drawable/bg_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="@string/page_number"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@={String.valueOf(page)}"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/layout_bottom">
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_refresh_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </FrameLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</layout>
