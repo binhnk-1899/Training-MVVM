@@ -15,10 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class UserAdapter(
     private val mContext: Context,
     private val mCallback: Callback
-) : RecyclerView.Adapter<UserAdapter.UserViewHolder>(), BindableAdapter<ArrayList<User>> {
-    override fun setData(data: ArrayList<User>) {
-        updateAdapter(data)
-    }
+) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     private val dataList: ArrayList<User> = ArrayList()
 

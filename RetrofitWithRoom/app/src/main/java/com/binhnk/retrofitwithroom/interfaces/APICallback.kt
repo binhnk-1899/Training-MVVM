@@ -8,7 +8,7 @@ import retrofit2.http.*
 
 
 interface APICallback {
-    @GET("api/userLiveData")
+    @GET("api/users")
     fun getAllUsers(@Query("page") page: String): Call<UserResponse>
 
     @POST("api/userLiveData")

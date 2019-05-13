@@ -79,48 +79,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * declare user live data
-     */
-    private fun declareUserLiveData() {
-        if (mUserVM == null) {
-            mUserVM = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        }
-        mUserVM!!.userLiveData.observe(this, Observer<ArrayList<User>> {
-            val newData = if (it != null) {
-                Log.e("Ahihi", "Size: ${it.size}")
-                it
-            } else {
-                Log.e("Ahihi", "Live Data null")
-                ArrayList()
-            }
-            mAdapter.updateAdapter(newData)
-        })
-    }
-
-    /**
-     * declare user response live data
-     */
-    private fun declareUserResponseLiveData() {
-        if (mUserResponseVM == null) {
-            mUserResponseVM = ViewModelProviders.of(this).get(UserResponseViewModel::class.java)
-        }
-        mUserResponseVM!!.userResponseLiveData.postValue(null)
-        mUserResponseVM!!.userResponseLiveData.observe(this, Observer<UserResponse> {
-            if (it != null) {
-                Log.e("Ahihi", "Size: ${it.users.size}")
-                it.setPageForUser()
-                mUserVM!!.userLiveData.postValue(it.users)
-            } else {
-                Log.e("Ahihi", "Live Data null")
-                Thread(Runnable {
-                    loadUserDataFromRoom(pageValue)
-                }).start()
-            }
-
-        })
-    }
-
-    /**
      * init UI
      */
     private fun initUI() {

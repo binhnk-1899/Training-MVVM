@@ -58,6 +58,7 @@
                 android:layout_marginEnd="@dimen/_14sdp"
                 android:layout_marginBottom="@dimen/_14sdp"
                 android:background="@drawable/bg_button"
+                android:onClick="@{view-> viewModel.onAddNewUserClicked(view)}"
                 android:paddingStart="@dimen/_12sdp"
                 android:paddingEnd="@dimen/_12sdp"
                 android:text="@string/add_new_user"
