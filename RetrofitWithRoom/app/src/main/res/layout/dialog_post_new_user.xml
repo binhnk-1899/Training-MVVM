@@ -5,11 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.MainBindingViewModel" />
-
-        <variable
-            name="dialog"
-            type="com.binhnk.retrofitwithroom.ui.dialogs.postuser.PostNewUserDialog" />
+            type="com.binhnk.retrofitwithroom.ui.main.SharedMainVM" />
     </data>
 
     <LinearLayout
@@ -47,7 +43,6 @@
             android:background="@drawable/bg_edit_text"
             android:gravity="center"
             android:hint="Job"
-            android:onTextChanged="@{(text, start, before, count)-> viewModel.onJobTextChanged(text)}"
             android:paddingStart="@dimen/_14sdp"
             android:paddingEnd="@dimen/_14sdp"
             android:singleLine="true"
@@ -61,7 +56,6 @@
             android:background="@drawable/bg_edit_text"
             android:gravity="center"
             android:hint="Name"
-            android:onTextChanged="@{(text, start, before, count)-> viewModel.onNameTextChanged(text)}"
             android:paddingStart="@dimen/_14sdp"
             android:paddingEnd="@dimen/_14sdp"
             android:singleLine="true"
@@ -84,7 +78,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
-                android:onClick="@{view-> viewModel.onCancelClicked()}"
                 android:paddingStart="@dimen/_12sdp"
                 android:paddingEnd="@dimen/_12sdp"
                 android:text="@android:string/cancel"
@@ -100,7 +93,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
-                android:onClick="@{view-> viewModel.onPostClicked(view)}"
                 android:paddingStart="@dimen/_12sdp"
                 android:paddingEnd="@dimen/_12sdp"
                 android:text="@string/post"

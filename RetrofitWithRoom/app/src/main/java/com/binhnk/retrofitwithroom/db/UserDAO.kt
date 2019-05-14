@@ -6,16 +6,16 @@ import com.binhnk.retrofitwithroom.models.user.User
 
 @Dao
 interface UserDAO {
-    @Query("SELECT * FROM userLiveData WHERE id = :userId")
+    @Query("SELECT * FROM usersLiveData WHERE id = :userId")
     fun getUserByUserId(userId: Int): User?
 
-    @Query("SELECT * FROM userLiveData WHERE page = :page")
+    @Query("SELECT * FROM usersLiveData WHERE page = :page")
     fun getUsersByPage(page: Int): List<User>
 
-    @Query("SELECT * FROM userLiveData WHERE first_name LIKE :key OR last_name LIKE :key OR email LIKE :key")
+    @Query("SELECT * FROM usersLiveData WHERE first_name LIKE :key OR last_name LIKE :key OR email LIKE :key")
     fun getUserByName(key: String): List<User>
 
-    @Query("SELECT * FROM userLiveData")
+    @Query("SELECT * FROM usersLiveData")
     fun getALlUser(): List<User>
 
     @Insert
@@ -24,12 +24,12 @@ interface UserDAO {
     @Delete
     fun deleteUser(user: User)
 
-    @Query("DELETE FROM userLiveData")
+    @Query("DELETE FROM usersLiveData")
     fun deleteAllUser()
 
     @Update
     fun updateUser(vararg users: User)
 
-    @Query("SELECT COUNT(id) FROM userLiveData")
+    @Query("SELECT COUNT(id) FROM usersLiveData")
     fun getDataCount(): LiveData<Int>
 }

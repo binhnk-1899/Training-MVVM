@@ -11,7 +11,7 @@ interface APICallback {
     @GET("api/users")
     fun getAllUsers(@Query("page") page: String): Call<UserResponse>
 
-    @POST("api/userLiveData")
+    @POST("api/usersLiveData")
     @FormUrlEncoded
     fun postUser(
         @Field("name") title: String,

@@ -54,7 +54,7 @@ class UserAdapter(
     }
 
     /**
-     * update new userLiveData for adapter
+     * update new usersLiveData for adapter
      */
     fun updateAdapter(mNewLst: ArrayList<User>) {
         val callback = DiffUtil.calculateDiff(UserDiffUtils(dataList, mNewLst))
