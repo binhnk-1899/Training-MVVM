@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
+import com.binhnk.retrofitwithroom.R
 
 abstract class BaseDialogFragment<ViewBinding : ViewDataBinding> : DialogFragment() {
 
@@ -31,6 +33,10 @@ abstract class BaseDialogFragment<ViewBinding : ViewDataBinding> : DialogFragmen
         dialog?.apply {
             isCancelable = false
             window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window!!.setLayout(
+                resources.getDimensionPixelSize(R.dimen._250sdp),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 }

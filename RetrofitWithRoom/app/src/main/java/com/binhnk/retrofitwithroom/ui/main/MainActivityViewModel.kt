@@ -112,6 +112,12 @@ class MainActivityViewModel : BaseViewModel() {
         })
     }
 
+    var userPost = MutableLiveData<String>().apply {
+        postValue("")
+    }
+    fun setUser(c: CharSequence) {
+        userPost.postValue(c.toString())
+    }
 
 //    var mPostUserDialog: PostNewUserDialog? = null
 //    var mPostUserSuccessDialog: PostNewUserSuccessDialog? = null

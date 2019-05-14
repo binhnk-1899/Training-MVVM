@@ -44,6 +44,7 @@
             android:gravity="center"
             android:hint="Job"
             android:paddingStart="@dimen/_14sdp"
+            android:onTextChanged="@{(text, start, before, count)-> viewModel.setUser(text)}"
             android:paddingEnd="@dimen/_14sdp"
             android:singleLine="true"
             android:textSize="@dimen/_12sdp" />
@@ -56,6 +57,7 @@
             android:background="@drawable/bg_edit_text"
             android:gravity="center"
             android:hint="Name"
+            android:text="@={viewModel.userPost}"
             android:paddingStart="@dimen/_14sdp"
             android:paddingEnd="@dimen/_14sdp"
             android:singleLine="true"

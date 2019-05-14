@@ -13,18 +13,19 @@ import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.db.UserDatabase
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
+import com.binhnk.retrofitwithroom.ui.dialogs.postuser.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
 import org.koin.androidx.viewmodel.ext.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
-    override val layoutId: Int
-        get() = R.layout.activity_main
 
     private lateinit var mContext: Context
     private lateinit var mOwner: LifecycleOwner
 
     override val viewModel: MainActivityViewModel by viewModel()
+    override val layoutId: Int
+        get() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +84,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
             viewModel.postNewUserClicked.observe(mOwner, Observer<Boolean> {
                 if (it != null && it) {
+                    val mPostNewUserDialog = PostNewUserDialog()
+                    mPostNewUserDialog.show(supportFragmentManager, "POST")
 
                 }
+                viewModel.postNewUserClicked.postValue(false)
             })
         }
 
