@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.SharedMainVM" />
+            type="com.binhnk.retrofitwithroom.ui.main.MainViewModel" />
     </data>
 
     <LinearLayout

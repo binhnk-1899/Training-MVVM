@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.SharedMainVM" />
+            type="com.binhnk.retrofitwithroom.ui.main.MainViewModel" />
 
     </data>
 
@@ -125,7 +125,7 @@
                     android:text="No data"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_12sdp"
-                    android:visibility="@{viewModel.noDataVisible, default=visible}" />
+                    android:visibility="@{viewModel.noDataVisible, default=gone}" />
 
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipe_refresh_layout"

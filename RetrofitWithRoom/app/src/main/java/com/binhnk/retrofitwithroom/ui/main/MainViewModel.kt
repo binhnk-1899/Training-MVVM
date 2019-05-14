@@ -7,12 +7,22 @@ import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserResponse
+import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class SharedMainVM : ViewModel() {
+class MainViewModel : BaseViewModel() {
+
+    override suspend fun onLoadFail(throwable: Throwable) {
+        super.onLoadFail(throwable)
+    }
+
+    override fun showError(e: Throwable) {
+        super.showError(e)
+    }
+
 
     /**
      * currentPage live data
@@ -30,10 +40,6 @@ class SharedMainVM : ViewModel() {
     /**
      * isLoading live data
      */
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
-        postValue(false)
-    }
-
     fun setLoading(b: Boolean) {
         isLoading.postValue(b)
     }

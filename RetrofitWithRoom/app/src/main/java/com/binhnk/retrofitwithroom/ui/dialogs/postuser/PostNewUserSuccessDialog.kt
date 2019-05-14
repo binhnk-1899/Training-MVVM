@@ -11,12 +11,12 @@
 //import com.binhnk.retrofitwithroom.R
 //import com.binhnk.retrofitwithroom.databinding.DialogAddNewUserSuccessBinding
 //import com.binhnk.retrofitwithroom.models.user.UserCreated
-//import com.binhnk.retrofitwithroom.ui.main.SharedMainVM
+//import com.binhnk.retrofitwithroom.ui.main.MainViewModel
 //
 //class PostNewUserSuccessDialog(
 //    context: Context,
 //    private val userCreated: UserCreated,
-//    private val mViewModel: SharedMainVM
+//    private val mViewModel: MainViewModel
 //) : Dialog(context) {
 //
 //    override fun onCreate(savedInstanceState: Bundle?) {

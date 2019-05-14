@@ -10,79 +10,84 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.binhnk.retrofitwithroom.BR
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.databinding.DialogPostNewUserBinding
 import com.binhnk.retrofitwithroom.db.UserDatabase
 import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.ui.base.BaseActivity
 import com.binhnk.retrofitwithroom.ui.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
+import org.koin.androidx.viewmodel.ext.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+
     private lateinit var mContext: Context
     private lateinit var mOwner: LifecycleOwner
 
-    private lateinit var mViewModel: SharedMainVM
+    override val viewModel: MainViewModel by viewModel()
+
+    override val layoutId: Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this@MainActivity
         mOwner = this@MainActivity
 
-        mViewModel = ViewModelProviders.of(this).get(SharedMainVM::class.java)
-            .apply {
-                this.userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
-                    override fun onItemLongClicked(mUserClicked: User) {
+        viewModel.apply {
+            this.userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
+                override fun onItemLongClicked(mUserClicked: User) {
 
-                    }
+                }
 
-                    override fun onItemClicked(mUserClicked: User) {
-                        val db = UserDatabase.getInstance(mContext)
-                        Thread(Runnable {
-                            if (db.userDAO().getUserByUserId(mUserClicked.id) == null) {
-                                db.userDAO().insertUser(mUserClicked)
-                                runOnUiThread {
-                                    Utils.shortToast(
-                                        mContext,
-                                        "User has been add to database"
-                                    )
-                                }
-                            } else {
-                                runOnUiThread {
-                                    Utils.shortToast(
-                                        mContext,
-                                        "User has been exist in database"
-                                    )
-                                }
+                override fun onItemClicked(mUserClicked: User) {
+                    val db = UserDatabase.getInstance(mContext)
+                    Thread(Runnable {
+                        if (db.userDAO().getUserByUserId(mUserClicked.id) == null) {
+                            db.userDAO().insertUser(mUserClicked)
+                            runOnUiThread {
+                                Utils.shortToast(
+                                    mContext,
+                                    "User has been add to database"
+                                )
                             }
-                        }).start()
-                    }
-                })
-            }
-
-        // data binding
-        DataBindingUtil.setContentView<ActivityMainBinding>(
-            this,
-            R.layout.activity_main
-        ).apply {
-            this.lifecycleOwner = mOwner
-            this.viewModel = mViewModel
+                        } else {
+                            runOnUiThread {
+                                Utils.shortToast(
+                                    mContext,
+                                    "User has been exist in database"
+                                )
+                            }
+                        }
+                    }).start()
+                }
+            })
         }
 
-        mViewModel.isLoading.observe(mOwner, Observer<Boolean> {
+        // data binding
+//        DataBindingUtil.setContentView<ActivityMainBinding>(
+//            this,
+//            R.layout.activity_main
+//        ).apply {
+//            setVariable(BR.viewModel, viewModel)
+//            this.lifecycleOwner = mOwner
+//            this.viewModel = viewModel
+//        }
+
+        viewModel.isLoading.observe(mOwner, Observer<Boolean> {
             if (it != null && it) {
-                mViewModel.loadUsers()
-                mViewModel.isLoading.postValue(false)
+                viewModel.loadUsers()
+                viewModel.isLoading.postValue(false)
             }
         })
 
-        mViewModel.startStorageActivity.observe(mOwner, Observer<Boolean> {
+        viewModel.startStorageActivity.observe(mOwner, Observer<Boolean> {
             if (it != null && it) {
                 val animBundle = ActivityOptions.makeCustomAnimation(
                     mContext,
@@ -92,26 +97,26 @@ class MainActivity : AppCompatActivity() {
                 val storageIntent = Intent(mContext, StorageActivity::class.java)
                 storageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(storageIntent, animBundle)
-                mViewModel.startStorageActivity.postValue(false)
+                viewModel.startStorageActivity.postValue(false)
             }
         })
 
-        mViewModel.usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
+        viewModel.usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
             if (it.isNullOrEmpty()) {
-                mViewModel.noDataVisible.postValue(View.VISIBLE)
-                mViewModel.userAdapter!!.updateAdapter(ArrayList())
+                viewModel.noDataVisible.postValue(View.VISIBLE)
+                viewModel.userAdapter!!.updateAdapter(ArrayList())
             } else {
-                mViewModel.noDataVisible.postValue(View.GONE)
-                mViewModel.userAdapter!!.updateAdapter(it)
+                viewModel.noDataVisible.postValue(View.GONE)
+                viewModel.userAdapter!!.updateAdapter(it)
             }
         })
 
-        mViewModel.postNewUserClicked.observe(mOwner, Observer<Boolean> {
+        viewModel.postNewUserClicked.observe(mOwner, Observer<Boolean> {
             if (it != null && it) {
                 // show post dialog
                 val mPostDialog = Dialog(mContext)
                 let {
-                    val sharedViewModel = ViewModelProviders.of(this).get(SharedMainVM::class.java)
+                    val sharedViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
                     val reviewBinding: DialogPostNewUserBinding = DataBindingUtil.inflate(
                         LayoutInflater.from(mContext),
                         R.layout.dialog_post_new_user,
@@ -129,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                         WindowManager.LayoutParams.WRAP_CONTENT
                     )
                 }
-                mViewModel.postNewUserClicked.postValue(false)
+                viewModel.postNewUserClicked.postValue(false)
             }
         })
     }
