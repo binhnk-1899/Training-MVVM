@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.BindingViewModel" />
+            type="com.binhnk.retrofitwithroom.ui.main.MainBindingViewModel" />
+
+        <variable
+            name="activity"
+            type="com.binhnk.retrofitwithroom.ui.main.MainActivity" />
 
     </data>
 
@@ -18,58 +22,63 @@
         android:orientation="vertical"
         tools:context=".ui.main.MainActivity">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
-            android:background="@color/colorPrimary"
-            android:paddingStart="@dimen/_14sdp"
-            android:paddingEnd="@dimen/_14sdp">
+            android:layout_height="@dimen/_48sdp"
+            android:background="@color/colorPrimary">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:text="@string/app_name"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold"
+                bind:layout_constraintBottom_toBottomOf="parent"
+                bind:layout_constraintStart_toStartOf="parent"
+                bind:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_datum_dao_count"
+            <ImageView
+                android:id="@+id/im_storage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:text="@={viewModel.currentPage}"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp" />
-        </FrameLayout>
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{view -> viewModel.startStorageActivity(activity)}"
+                android:padding="@dimen/_12sdp"
+                android:src="@drawable/ic_storage"
+                bind:layout_constraintBottom_toBottomOf="parent"
+                bind:layout_constraintEnd_toEndOf="parent"
+                bind:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{view-> viewModel.onAddNewUserClicked(activity)}"
+                android:padding="@dimen/_12sdp"
+                android:src="@drawable/ic_person_add"
+                bind:layout_constraintBottom_toBottomOf="parent"
+                bind:layout_constraintEnd_toStartOf="@id/im_storage"
+                bind:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_post_user"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:layout_marginEnd="@dimen/_14sdp"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:background="@drawable/bg_button"
-                android:onClick="@{view-> viewModel.onAddNewUserClicked(view)}"
-                android:paddingStart="@dimen/_12sdp"
-                android:paddingEnd="@dimen/_12sdp"
-                android:text="@string/add_new_user"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp" />
-
             <RelativeLayout
                 android:id="@+id/layout_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/btn_post_user"
+                android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/_14sdp">
 
                 <Button
@@ -79,7 +88,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/bg_button"
-                    android:onClick="@{view-> viewModel.onGetDataClicked()}"
+                    android:onClick="@{view-> viewModel.bindData(activity)}"
                     android:paddingStart="@dimen/_12sdp"
                     android:paddingEnd="@dimen/_12sdp"
                     android:text="@string/get_data"
@@ -115,12 +124,16 @@
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipe_refresh_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    bind:onRefreshListener="@{() -> viewModel.onRefresh(activity)}"
+                    bind:refreshing="@{viewModel.isGettingData}">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_user"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        bind:adapter="@{viewModel.userAdapter}"
+                        bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </FrameLayout>
         </RelativeLayout>

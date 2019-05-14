@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.dialogs
+package com.binhnk.retrofitwithroom.ui.dialogs.postuser
 
 import android.app.Dialog
 import android.content.Context
@@ -10,8 +10,8 @@ import android.widget.TextView
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.models.user.UserCreated
 
-class AddNewUserSuccessDialog(context: Context,
-                              private val userCreated: UserCreated) : Dialog(context) {
+class PostNewUserSuccessDialog(context: Context,
+                               private val userCreated: UserCreated) : Dialog(context) {
 
     private lateinit var tv_id: TextView
     private lateinit var tv_job: TextView

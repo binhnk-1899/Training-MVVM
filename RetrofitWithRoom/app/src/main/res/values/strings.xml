@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Retrofit LiveData Room</string>
     <string name="get_data">get data</string>
-    <string name="page_number">Page number (Default is 1)</string>
+    <string name="page_number">Page number (1–4)</string>
     <string name="do_you_want_to_remove_this_user_from_database">Do you want to remove this user from database?</string>
     <string name="add_new_user">Add new user</string>
     <string name="submit">Submit</string>
@@ -9,5 +9,7 @@
     <string name="job">Job: %s</string>
     <string name="name">Name: %s</string>
     <string name="created_at">Created at: %s</string>
-    <string name="upload_new_user_success">Upload new user success</string>
+    <string name="upload_new_user_success">POST SUCCESS</string>
+    <string name="post_new_user">POST NEW USER</string>
+    <string name="post">Post</string>
 </resources>

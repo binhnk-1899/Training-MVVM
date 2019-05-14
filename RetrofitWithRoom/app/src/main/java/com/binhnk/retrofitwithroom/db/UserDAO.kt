@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.interfaces
+package com.binhnk.retrofitwithroom.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

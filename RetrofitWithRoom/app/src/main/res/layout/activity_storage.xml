@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.binhnk.retrofitwithroom.ui.storage.StorageBindingViewModel" />
+
+        <variable
+            name="activity"
+            type="com.binhnk.retrofitwithroom.ui.storage.StorageActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        tools:context=".ui.storage.StorageActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{view -> activity.onBackPressed()}"
+                android:padding="@dimen/_12sdp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User storage"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/_14sdp"
+                android:text="No data"
+                android:textColor="#3c3c3c"
+                android:visibility="@{viewModel.tvNoDataVisibility}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                bind:adapter="@{viewModel.userAdapter}"
+                bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>
