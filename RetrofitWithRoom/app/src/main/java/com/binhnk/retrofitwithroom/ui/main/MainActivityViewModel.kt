@@ -1,6 +1,7 @@
 package com.binhnk.retrofitwithroom.ui.main
 
 import android.view.View
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
@@ -14,11 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivityViewModel : ViewModel() {
-
-//    override suspend fun onLoadFail(throwable: Throwable) {
-//        super.onLoadFail(throwable)
-//    }
+class MainActivityViewModel : BaseViewModel() {
 
     /**
      * currentPage live data
@@ -36,12 +33,12 @@ class MainActivityViewModel : ViewModel() {
     /**
      * isLoading live data
      */
-    val isRefreshLoading = MutableLiveData<Boolean>().apply {
-        postValue(false)
+    val isRefreshLoading = ObservableField<Boolean>().apply {
+        set(false)
     }
 
     fun callRefreshLoading() {
-        isRefreshLoading.postValue(true)
+        isRefreshLoading.set(true)
         loadUsers()
     }
 
@@ -97,7 +94,7 @@ class MainActivityViewModel : ViewModel() {
         ClientController.requestGetListUser(currentPage, object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 usersLiveData.postValue(ArrayList())
-                isRefreshLoading.postValue(false)
+                isRefreshLoading.set(false)
             }
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
@@ -108,7 +105,8 @@ class MainActivityViewModel : ViewModel() {
                 } else {
                     usersLiveData.postValue(ArrayList())
                 }
-                isRefreshLoading.postValue(false)
+                isRefreshLoading.set(false)
+
             }
 
         })

@@ -5,12 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
@@ -21,30 +17,21 @@ import com.binhnk.retrofitwithroom.ui.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
 import org.koin.androidx.viewmodel.ext.viewModel
 
-class MainActivity : AppCompatActivity() {
-//    BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
+class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
+    override val layoutId: Int
+        get() = R.layout.activity_main
 
     private lateinit var mContext: Context
     private lateinit var mOwner: LifecycleOwner
 
-     var mViewModel: MainActivityViewModel? = null
-//    override val viewModel: MainActivityViewModel by viewModel()
-
-//    override val layoutId: Int = R.layout.activity_main
+    override val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this@MainActivity
         mOwner = this@MainActivity
 
-        mViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-
-        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-            .apply {
-                this.viewModel = mViewModel
-            }
-
-        mViewModel?.apply {
+        viewModel.apply {
             this.userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
                 override fun onItemLongClicked(mUserClicked: User) {
 
@@ -73,13 +60,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-//            viewModel.isRefreshLoading.observe(mOwner, Observer {
-//                if (it != null && it) {
-//                    viewModel.loadUsers()
-//                }
-//            })
-
-            mViewModel?.startStorageActivity?.observe(mOwner, Observer {
+            viewModel.startStorageActivity.observe(mOwner, Observer {
                 val animBundle = ActivityOptions.makeCustomAnimation(
                     mContext,
                     R.anim.anim_enter_rtl,
@@ -90,41 +71,19 @@ class MainActivity : AppCompatActivity() {
                 startActivity(storageIntent, animBundle)
             })
 
-            mViewModel?.usersLiveData?.observe(mOwner, Observer<ArrayList<User>> {
+            viewModel.usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
                 if (it.isNullOrEmpty()) {
-                    mViewModel?.noDataVisible?.postValue(View.VISIBLE)
-                    mViewModel?.userAdapter!!.updateAdapter(ArrayList())
+                    viewModel.noDataVisible.postValue(View.VISIBLE)
+                    viewModel.userAdapter!!.updateAdapter(ArrayList())
                 } else {
-                    mViewModel?.noDataVisible?.postValue(View.GONE)
-                    mViewModel?.userAdapter!!.updateAdapter(it)
+                    viewModel.noDataVisible.postValue(View.GONE)
+                    viewModel.userAdapter!!.updateAdapter(it)
                 }
             })
 
-            mViewModel?.postNewUserClicked?.observe(mOwner, Observer<Boolean> {
+            viewModel.postNewUserClicked.observe(mOwner, Observer<Boolean> {
                 if (it != null && it) {
-                    // show post dialog
-//                    val mPostDialog = Dialog(mContext)
-//                    let {
-//                        val sharedViewModel =
-//                            ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-//                        val reviewBinding: DialogPostNewUserBinding = DataBindingUtil.inflate(
-//                            LayoutInflater.from(mContext),
-//                            R.layout.dialog_post_new_user,
-//                            null,
-//                            false
-//                        )
-//                        mPostDialog.setContentView(reviewBinding.root)
-//                        reviewBinding.apply {
-//                            this.viewModel = sharedViewModel
-//                        }
-//                        mPostDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//                        mPostDialog.show()
-//                        mPostDialog.window!!.setLayout(
-//                            resources.getDimensionPixelSize(R.dimen._250sdp),
-//                            WindowManager.LayoutParams.WRAP_CONTENT
-//                        )
-//                    }
-//                    viewModel.postNewUserClicked.postValue(false)
+
                 }
             })
         }
