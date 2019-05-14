@@ -8,21 +8,17 @@ import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
+import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainViewModel : BaseViewModel() {
+class MainActivityViewModel : ViewModel() {
 
-    override suspend fun onLoadFail(throwable: Throwable) {
-        super.onLoadFail(throwable)
-    }
-
-    override fun showError(e: Throwable) {
-        super.showError(e)
-    }
-
+//    override suspend fun onLoadFail(throwable: Throwable) {
+//        super.onLoadFail(throwable)
+//    }
 
     /**
      * currentPage live data
@@ -40,20 +36,22 @@ class MainViewModel : BaseViewModel() {
     /**
      * isLoading live data
      */
-    fun setLoading(b: Boolean) {
-        isLoading.postValue(b)
+    val isRefreshLoading = MutableLiveData<Boolean>().apply {
+        postValue(false)
+    }
+
+    fun callRefreshLoading() {
+        isRefreshLoading.postValue(true)
+        loadUsers()
     }
 
     /**
      * start StorageActivity live data
      */
-    val startStorageActivity = MutableLiveData<Boolean>()
-        .apply {
-            postValue(false)
-        }
+    val startStorageActivity = SingleLiveEvent<Unit>()
 
-    fun setStartStorageActivity(b: Boolean) {
-        startStorageActivity.postValue(b)
+    fun setStartStorageActivity() {
+        startStorageActivity.call()
     }
 
     /**
@@ -95,15 +93,14 @@ class MainViewModel : BaseViewModel() {
     /**
      * load user using retrofit
      */
-    fun loadUsers() {
+    private fun loadUsers() {
         ClientController.requestGetListUser(currentPage, object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                isLoading.postValue(false)
                 usersLiveData.postValue(ArrayList())
+                isRefreshLoading.postValue(false)
             }
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                isLoading.postValue(false)
                 if (response.isSuccessful
                     && response.body() != null
                 ) {
@@ -111,6 +108,7 @@ class MainViewModel : BaseViewModel() {
                 } else {
                     usersLiveData.postValue(ArrayList())
                 }
+                isRefreshLoading.postValue(false)
             }
 
         })
