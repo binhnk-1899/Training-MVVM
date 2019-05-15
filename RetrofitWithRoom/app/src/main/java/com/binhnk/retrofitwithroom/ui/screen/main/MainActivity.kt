@@ -93,6 +93,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                     mSuccessDialog.show(supportFragmentManager, "SUCCESS")
                 }
             })
+
+            postUserFailure.observe(mOwner, Observer {
+                Utils.shortToast(mContext, "Post user failure")
+            })
+            postUserSuccess.observe(mOwner, Observer {
+
+            })
+            postUserUnSuccess.observe(mOwner, Observer {
+                Utils.shortToast(mContext, "Post user unsuccessful")
+            })
         }
 
     }

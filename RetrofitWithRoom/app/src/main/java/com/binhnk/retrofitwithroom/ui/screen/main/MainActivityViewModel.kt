@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
-import com.binhnk.retrofitwithroom.data.remote.ApiService
-import com.binhnk.retrofitwithroom.data.remote.UserApi
 import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
 import com.binhnk.retrofitwithroom.data.repository.UserRepository
 import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
@@ -97,7 +95,7 @@ class MainActivityViewModel(
      * load user using retrofit
      */
     private fun loadUsers() {
-        userRepository.searchItems(currentPage).enqueue(object : Callback<UserResponse> {
+        userRepository.getUsers(currentPage).enqueue(object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 usersLiveData.postValue(ArrayList())
                 isRefreshLoading.set(false)
@@ -156,7 +154,32 @@ class MainActivityViewModel(
 
     fun onPostClicked() {
         postClicked.call()
+        userRepository.postUser(userPost.value!!, jobPost.value!!)
+            .enqueue(object : Callback<UserCreated> {
+                override fun onFailure(call: Call<UserCreated>, t: Throwable) {
+                    postUserFailure.call()
+                }
+
+                override fun onResponse(
+                    call: Call<UserCreated>,
+                    response: Response<UserCreated>
+                ) {
+                    if (response.isSuccessful
+                        && response.body() != null
+                    ) {
+                        userCreated.postValue(response.body())
+                        postUserSuccess.call()
+                    } else {
+                        postUserUnSuccess.call()
+                    }
+                }
+
+            })
     }
+
+    val postUserFailure = SingleLiveEvent<Unit>()
+    val postUserSuccess = SingleLiveEvent<Unit>()
+    val postUserUnSuccess = SingleLiveEvent<Unit>()
 
     /**
      * user created

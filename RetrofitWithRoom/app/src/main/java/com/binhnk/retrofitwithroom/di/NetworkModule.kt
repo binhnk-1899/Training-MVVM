@@ -3,22 +3,15 @@ package com.binhnk.retrofitwithroom.di
 import android.content.Context
 import com.binhnk.retrofitwithroom.BuildConfig
 import com.binhnk.retrofitwithroom.data.constants.Constants
-import com.binhnk.retrofitwithroom.data.remote.ApiService
 import com.binhnk.retrofitwithroom.data.remote.UserApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
-import retrofit2.*
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
