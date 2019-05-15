@@ -1,11 +1,12 @@
-package com.binhnk.retrofitwithroom.db
+package com.binhnk.retrofitwithroom.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.binhnk.retrofitwithroom.models.user.User
-import com.binhnk.retrofitwithroom.db.UserDatabase.Companion.DATABASE_VERSION
+import com.binhnk.retrofitwithroom.data.db.UserDatabase.Companion.DATABASE_VERSION
+import com.binhnk.retrofitwithroom.data.dao.UserDAO
 
 
 @Database(entities = [User::class], version = DATABASE_VERSION, exportSchema = false)
@@ -23,7 +24,9 @@ abstract class UserDatabase : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(UserDatabase::class) {
                     INSTANCE =
-                        Room.databaseBuilder(context.applicationContext, UserDatabase::class.java, DATABASE_NAME)
+                        Room.databaseBuilder(context.applicationContext, UserDatabase::class.java,
+                            DATABASE_NAME
+                        )
                             .fallbackToDestructiveMigration()
                             .build()
                 }

@@ -12,4 +12,5 @@
     <string name="upload_new_user_success">POST USER SUCCESSFUL</string>
     <string name="post_new_user">POST NEW USER</string>
     <string name="post">Post</string>
+    <string name="user_information">USER INFORMATION</string>
 </resources>

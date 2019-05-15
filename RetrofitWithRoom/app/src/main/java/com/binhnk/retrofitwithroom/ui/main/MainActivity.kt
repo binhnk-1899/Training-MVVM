@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
-import com.binhnk.retrofitwithroom.db.UserDatabase
+import com.binhnk.retrofitwithroom.data.db.UserDatabase
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
 import com.binhnk.retrofitwithroom.ui.storage.StorageActivity

@@ -1,73 +1,81 @@
 package com.binhnk.retrofitwithroom.ui.storage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityStorageBinding
-import com.binhnk.retrofitwithroom.db.UserDatabase
 import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.ui.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_storage.*
+import org.koin.androidx.viewmodel.ext.viewModel
+import kotlin.math.min
 
-class StorageActivity : AppCompatActivity() {
+class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityViewModel>() {
 
-    private var mViewModel: StorageBindingViewModel? = null
+    private lateinit var mOwner: LifecycleOwner
+
+    override val viewModel: StorageActivityViewModel by viewModel()
+    override val layoutId: Int
+        get() = R.layout.activity_storage
+
+    private var mUserAdapter: UserAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mOwner = this@StorageActivity
 
-        mViewModel = ViewModelProviders.of(this).get(StorageBindingViewModel::class.java)
-            .apply {
-                this.userAdapter = UserAdapter(this@StorageActivity, object : UserAdapter.Callback {
-                    override fun onItemClicked(mUserClicked: User) {
-                        // do nothing
+        initRvAdapter()
+
+        viewModel.apply {
+            userList.observe(mOwner, Observer {
+                val data = if (it != null) {
+                    if (it.isEmpty()) {
+                        noDataVisibility.postValue(View.VISIBLE)
+                        ArrayList()
+                    } else {
+                        noDataVisibility.postValue(View.GONE)
+                        ArrayList(it)
                     }
+                } else {
+                    noDataVisibility.postValue(View.VISIBLE)
+                    ArrayList()
+                }
+                if (mUserAdapter != null) {
+                    mUserAdapter!!.updateAdapter(data)
+                }
+            })
 
-                    override fun onItemLongClicked(mUserClicked: User) {
-                        // do nothing
-                    }
+            noDataVisibility.observe(mOwner, Observer {
+                tv_no_data_storage.visibility = it
+            })
 
-                })
-            }
-
-        // binding
-        DataBindingUtil.setContentView<ActivityStorageBinding>(
-            this@StorageActivity,
-            R.layout.activity_storage
-        ).apply {
-            this.lifecycleOwner = this@StorageActivity
-            this.viewModel = mViewModel
-            this.activity = this@StorageActivity
+            onBackPressed.observe(mOwner, Observer {
+                onBackPressed()
+            })
         }
 
+    }
 
-        mViewModel!!.userListLiveData.observe(this, Observer {
-            val data = if (it != null) {
-                if (it.isEmpty()) {
-                    mViewModel!!.tvNoDataVisibility.postValue(View.VISIBLE)
-                    ArrayList()
-                } else {
-                    mViewModel!!.tvNoDataVisibility.postValue(View.GONE)
-                    ArrayList(it)
-                }
-            } else {
-                mViewModel!!.tvNoDataVisibility.postValue(View.VISIBLE)
-                ArrayList()
+    /**
+     * init rv adapter
+     */
+    private fun initRvAdapter() {
+        mUserAdapter = UserAdapter(this@StorageActivity, object : UserAdapter.Callback {
+            override fun onItemClicked(mUserClicked: User) {
+                viewModel.userClicked.postValue(mUserClicked)
+                val mInfoDialog = UserInfoDialog()
+                mInfoDialog.show(supportFragmentManager, "INFO")
             }
-            Log.e("Ahihi", "1 ${data.size}")
-            mViewModel!!.userAdapter!!.updateAdapter(data)
-        })
 
-        val userDBRoom = UserDatabase.getInstance(this@StorageActivity)
-        Thread(Runnable {
-            val data = userDBRoom.userDAO().getALlUser()
-            Log.e("Ahihi", "2 ${data.size}")
-            runOnUiThread { mViewModel!!.userListLiveData.value = data }
-        }).start()
+            override fun onItemLongClicked(mUserClicked: User) {
+
+            }
+
+        })
+        rv_user_storage.adapter = mUserAdapter
     }
 
     override fun onBackPressed() {

@@ -7,11 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.storage.StorageBindingViewModel" />
-
-        <variable
-            name="activity"
-            type="com.binhnk.retrofitwithroom.ui.storage.StorageActivity" />
+            type="com.binhnk.retrofitwithroom.ui.storage.StorageActivityViewModel" />
     </data>
 
     <LinearLayout
@@ -34,7 +30,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{view -> activity.onBackPressed()}"
+                android:onClick="@{view-> viewModel.callOnBackPressed()}"
                 android:padding="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_back" />
 
@@ -52,19 +48,19 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv_no_data_storage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/_14sdp"
                 android:text="No data"
-                android:textColor="#3c3c3c"
-                android:visibility="@{viewModel.tvNoDataVisibility}" />
+                android:textColor="#3c3c3c" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_user_storage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                bind:adapter="@{viewModel.userAdapter}"
                 bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </FrameLayout>
 
