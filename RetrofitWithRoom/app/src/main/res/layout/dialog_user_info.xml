@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.storage.StorageActivityViewModel" />
+            type="com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,8 +46,8 @@
             android:text="User ID:"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintStart_toEndOf="@id/im_avatar"
             app:layout_constraintBottom_toBottomOf="@id/im_avatar"
+            app:layout_constraintStart_toEndOf="@id/im_avatar"
             app:layout_constraintTop_toTopOf="@id/im_avatar" />
 
         <TextView
@@ -144,8 +144,7 @@
             android:id="@+id/tv_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_14sdp"
             android:background="?selectableItemBackground"
             android:clickable="true"
@@ -155,12 +154,32 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingEnd="@dimen/_14sdp"
             android:paddingBottom="@dimen/_6sdp"
-            android:text="OK"
-            android:textColor="@android:color/black"
+            android:text="@android:string/ok"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_email_2" />
+
+        <TextView
+            android:id="@+id/tv_delete_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
+            android:onClick="@{view-> viewModel.callOnDeletePressed()}"
+            android:paddingStart="@dimen/_14sdp"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_6sdp"
+            android:text="@string/delete_user"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_ok" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

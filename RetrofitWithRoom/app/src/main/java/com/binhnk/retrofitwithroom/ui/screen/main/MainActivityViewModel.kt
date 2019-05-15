@@ -1,13 +1,15 @@
-package com.binhnk.retrofitwithroom.ui.main
+package com.binhnk.retrofitwithroom.ui.screen.main
 
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.binhnk.retrofitwithroom.adapters.UserAdapter
-import com.binhnk.retrofitwithroom.client.ClientController
-import com.binhnk.retrofitwithroom.models.user.User
-import com.binhnk.retrofitwithroom.models.user.UserCreated
-import com.binhnk.retrofitwithroom.models.user.UserResponse
+import com.binhnk.retrofitwithroom.data.dao.UserDAO
+import com.binhnk.retrofitwithroom.data.model.User
+import com.binhnk.retrofitwithroom.data.model.UserCreated
+import com.binhnk.retrofitwithroom.data.remote.APICallback
+import com.binhnk.retrofitwithroom.data.remote.ApiService
+import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
+import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import retrofit2.Call
@@ -15,7 +17,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivityViewModel : BaseViewModel() {
+class MainActivityViewModel(
+    private val userDAO: UserDAO
+//    private val apiCallback: APICallback
+) : BaseViewModel() {
 
     /**
      * currentPage live data
@@ -91,7 +96,26 @@ class MainActivityViewModel : BaseViewModel() {
      * load user using retrofit
      */
     private fun loadUsers() {
-        ClientController.requestGetListUser(currentPage, object : Callback<UserResponse> {
+//        apiCallback.getAllUsers(currentPage.toString()).enqueue(object : Callback<UserResponse> {
+//            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+//                usersLiveData.postValue(ArrayList())
+//                isRefreshLoading.set(false)
+//            }
+//
+//            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+//                if (response.isSuccessful
+//                    && response.body() != null
+//                ) {
+//                    usersLiveData.postValue(response.body()!!.users)
+//                } else {
+//                    usersLiveData.postValue(ArrayList())
+//                }
+//                isRefreshLoading.set(false)
+//
+//            }
+//
+//        })
+        ApiService.requestGetListUser(currentPage, object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 usersLiveData.postValue(ArrayList())
                 isRefreshLoading.set(false)
@@ -152,5 +176,15 @@ class MainActivityViewModel : BaseViewModel() {
         postClicked.call()
     }
 
+    /**
+     * user created
+     */
     val userCreated = MutableLiveData<UserCreated>().apply { postValue(null) }
+
+    /**
+     * add user to database
+     */
+    fun addUserToDB(user: User): Long {
+        return userDAO.insertUser(user)
+    }
 }

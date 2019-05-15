@@ -1,27 +1,29 @@
-package com.binhnk.retrofitwithroom.ui.storage
+package com.binhnk.retrofitwithroom.ui.screen.storage
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.adapters.UserAdapter
+import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityStorageBinding
-import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_storage.*
 import org.koin.androidx.viewmodel.ext.viewModel
-import kotlin.math.min
 
 class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityViewModel>() {
 
     private lateinit var mOwner: LifecycleOwner
 
+    private var mConfirmDialog: RemoveConfirmDialog? = null
+    private var mInfoDialog: UserInfoDialog? = null
+
+    private var mUserAdapter: UserAdapter? = null
+
     override val viewModel: StorageActivityViewModel by viewModel()
     override val layoutId: Int
         get() = R.layout.activity_storage
-
-    private var mUserAdapter: UserAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,31 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                 tv_no_data_storage.visibility = it
             })
 
+            onDeletePressed.observe(mOwner, Observer {
+                if (mInfoDialog != null) {
+                    try {
+                        mInfoDialog!!.dismiss()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                if (mConfirmDialog == null) {
+                    mConfirmDialog = RemoveConfirmDialog()
+                }
+                mConfirmDialog!!.show(supportFragmentManager, "CONFIRM")
+            })
+
+            onConfirmDeletePressed.observe(mOwner, Observer {
+                if (mConfirmDialog != null) {
+                    try {
+                        mConfirmDialog!!.dismiss()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                removeUserFromDB()
+            })
+
             onBackPressed.observe(mOwner, Observer {
                 onBackPressed()
             })
@@ -66,8 +93,10 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
         mUserAdapter = UserAdapter(this@StorageActivity, object : UserAdapter.Callback {
             override fun onItemClicked(mUserClicked: User) {
                 viewModel.userClicked.postValue(mUserClicked)
-                val mInfoDialog = UserInfoDialog()
-                mInfoDialog.show(supportFragmentManager, "INFO")
+                if (mInfoDialog == null) {
+                    mInfoDialog = UserInfoDialog()
+                }
+                mInfoDialog!!.show(supportFragmentManager, "INFO")
             }
 
             override fun onItemLongClicked(mUserClicked: User) {

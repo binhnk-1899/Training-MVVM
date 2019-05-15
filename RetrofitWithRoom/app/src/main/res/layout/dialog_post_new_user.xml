@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.MainActivityViewModel" />
+            type="com.binhnk.retrofitwithroom.ui.screen.main.MainActivityViewModel" />
     </data>
 
     <LinearLayout
@@ -85,6 +85,7 @@
                 android:paddingEnd="@dimen/_12sdp"
                 android:text="@android:string/cancel"
                 android:textAllCaps="true"
+                android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/_12sdp" />
 
@@ -95,6 +96,7 @@
                 android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:onClick="@{view-> viewModel.onPostClicked()}"
                 android:paddingStart="@dimen/_12sdp"

@@ -1,6 +1,6 @@
-package com.binhnk.retrofitwithroom.models.user
+package com.binhnk.retrofitwithroom.data.remote.response
 
-import android.util.Log
+import com.binhnk.retrofitwithroom.data.model.User
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -19,10 +19,9 @@ class UserResponse(
 ) {
 
     fun setPageForUser() {
-        Log.e("Ahihi", "Page: $page")
         if (users.isNotEmpty()) {
             for (user in users) {
-                user.page = page    
+                user.page = page
             }
         }
     }

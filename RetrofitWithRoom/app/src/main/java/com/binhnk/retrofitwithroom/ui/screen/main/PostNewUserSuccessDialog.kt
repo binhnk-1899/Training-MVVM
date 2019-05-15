@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.main
+package com.binhnk.retrofitwithroom.ui.screen.main
 
 import android.os.Bundle
 import android.view.View

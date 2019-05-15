@@ -1,13 +1,13 @@
-package com.binhnk.retrofitwithroom.client
+package com.binhnk.retrofitwithroom.data.remote
 
-import com.binhnk.retrofitwithroom.interfaces.APICallback
-import com.binhnk.retrofitwithroom.models.user.UserCreated
-import com.binhnk.retrofitwithroom.models.user.UserResponse
+import com.binhnk.retrofitwithroom.data.model.UserCreated
+import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
+import com.binhnk.retrofitwithroom.di.networkModule
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ClientController {
+class ApiService {
 
     companion object {
         const val BASE_URL = "https://reqres.in/"

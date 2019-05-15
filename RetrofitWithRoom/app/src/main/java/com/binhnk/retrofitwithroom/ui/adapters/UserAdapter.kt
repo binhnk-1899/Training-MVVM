@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.adapters
+package com.binhnk.retrofitwithroom.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.data.model.User
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 

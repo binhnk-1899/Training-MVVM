@@ -13,4 +13,6 @@
     <string name="post_new_user">POST NEW USER</string>
     <string name="post">Post</string>
     <string name="user_information">USER INFORMATION</string>
+    <string name="delete_user">Delete user</string>
+    <string name="delete">Delete</string>
 </resources>

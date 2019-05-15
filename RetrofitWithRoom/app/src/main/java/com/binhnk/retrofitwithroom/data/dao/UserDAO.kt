@@ -2,7 +2,7 @@ package com.binhnk.retrofitwithroom.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.data.model.User
 
 @Dao
 interface UserDAO {
@@ -18,8 +18,8 @@ interface UserDAO {
     @Query("SELECT * FROM usersLiveData")
     fun getALlUser(): List<User>
 
-    @Insert
-    fun insertUser(vararg users: User)
+    @Insert(onConflict = OnConflictStrategy.IGNORE) // IGNORE was return -1
+    fun insertUser(user: User): Long
 
     @Delete
     fun deleteUser(user: User)

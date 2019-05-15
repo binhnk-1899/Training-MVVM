@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.main
+package com.binhnk.retrofitwithroom.ui.screen.main
 
 import android.app.ActivityOptions
 import android.content.Context
@@ -8,12 +8,11 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.adapters.UserAdapter
+import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
-import com.binhnk.retrofitwithroom.data.db.UserDatabase
-import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
-import com.binhnk.retrofitwithroom.ui.storage.StorageActivity
+import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.viewModel
@@ -35,27 +34,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         viewModel.apply {
             userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
                 override fun onItemLongClicked(mUserClicked: User) {
-
+                    // do nothing
                 }
 
                 override fun onItemClicked(mUserClicked: User) {
-                    val db = UserDatabase.getInstance(mContext)
                     Thread(Runnable {
-                        if (db.userDAO().getUserByUserId(mUserClicked.id) == null) {
-                            db.userDAO().insertUser(mUserClicked)
-                            runOnUiThread {
-                                Utils.shortToast(
-                                    mContext,
+                        val result = addUserToDB(mUserClicked)
+                        runOnUiThread {
+                            Utils.shortToast(
+                                mContext,
+                                if (result > 0) {
                                     "User has been add to database"
-                                )
-                            }
-                        } else {
-                            runOnUiThread {
-                                Utils.shortToast(
-                                    mContext,
+                                } else {
                                     "User has been exist in database"
-                                )
-                            }
+                                }
+                            )
                         }
                     }).start()
                 }

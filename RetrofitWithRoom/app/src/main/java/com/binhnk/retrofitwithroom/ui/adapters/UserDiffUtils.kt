@@ -1,7 +1,7 @@
-package com.binhnk.retrofitwithroom.adapters
+package com.binhnk.retrofitwithroom.ui.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.data.model.User
 
 class UserDiffUtils(
     private val oldLst: ArrayList<User>,

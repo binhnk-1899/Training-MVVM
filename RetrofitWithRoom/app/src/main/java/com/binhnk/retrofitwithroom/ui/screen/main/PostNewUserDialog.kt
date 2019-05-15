@@ -1,11 +1,11 @@
-package com.binhnk.retrofitwithroom.ui.main
+package com.binhnk.retrofitwithroom.ui.screen.main
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.client.ClientController
-import com.binhnk.retrofitwithroom.models.user.UserCreated
+import com.binhnk.retrofitwithroom.data.remote.ApiService
+import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
 import com.binhnk.retrofitwithroom.utils.Utils
 import org.koin.androidx.viewmodel.ext.sharedViewModel
@@ -32,7 +32,7 @@ class PostNewUserDialog :
             })
             postClicked.observe(this@PostNewUserDialog, Observer {
                 dismiss()
-                ClientController.postUser(userPost.value!!, jobPost.value!!, object : Callback<UserCreated> {
+                ApiService.postUser(userPost.value!!, jobPost.value!!, object : Callback<UserCreated> {
                     override fun onFailure(call: Call<UserCreated>, t: Throwable) {
                         Utils.shortToast(context!!, "Post user failure")
                     }

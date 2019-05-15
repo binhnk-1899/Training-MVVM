@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.main.MainActivityViewModel" />
+            type="com.binhnk.retrofitwithroom.ui.screen.main.MainActivityViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:orientation="vertical"
-        tools:context=".ui.main.MainActivity">
+        tools:context=".ui.screen.main.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frameLayout"

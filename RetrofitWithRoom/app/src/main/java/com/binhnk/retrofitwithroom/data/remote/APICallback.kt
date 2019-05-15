@@ -1,8 +1,7 @@
-package com.binhnk.retrofitwithroom.interfaces
+package com.binhnk.retrofitwithroom.data.remote
 
-import com.binhnk.retrofitwithroom.models.user.User
-import com.binhnk.retrofitwithroom.models.user.UserCreated
-import com.binhnk.retrofitwithroom.models.user.UserResponse
+import com.binhnk.retrofitwithroom.data.model.UserCreated
+import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
 import retrofit2.Call
 import retrofit2.http.*
 

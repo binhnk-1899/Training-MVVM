@@ -1,6 +1,7 @@
-package com.binhnk.retrofitwithroom.ui.storage
+package com.binhnk.retrofitwithroom.ui.screen.storage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
@@ -23,6 +24,11 @@ class UserInfoDialog : BaseDialogFragment<DialogUserInfoBinding>() {
 
         mViewModel.onCancelPressed.observe(this, Observer {
             dismiss()
+        })
+
+        mViewModel.onDeletePressed.observe(this, Observer {
+            Log.e("Ahihi", "Delete pressed")
+            mViewModel.onCancelPressed.call()
         })
 
         mViewModel.userClicked.observe(this, Observer {

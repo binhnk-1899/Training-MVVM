@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.storage.StorageActivityViewModel" />
+            type="com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:orientation="vertical"
-        tools:context=".ui.storage.StorageActivity">
+        tools:context=".ui.screen.storage.StorageActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

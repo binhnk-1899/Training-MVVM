@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.models.user
+package com.binhnk.retrofitwithroom.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
