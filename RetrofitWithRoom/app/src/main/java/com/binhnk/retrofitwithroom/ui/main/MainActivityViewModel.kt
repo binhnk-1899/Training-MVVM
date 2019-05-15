@@ -3,10 +3,10 @@ package com.binhnk.retrofitwithroom.ui.main
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.binhnk.retrofitwithroom.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.client.ClientController
 import com.binhnk.retrofitwithroom.models.user.User
+import com.binhnk.retrofitwithroom.models.user.UserCreated
 import com.binhnk.retrofitwithroom.models.user.UserResponse
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
@@ -112,12 +112,47 @@ class MainActivityViewModel : BaseViewModel() {
         })
     }
 
+    /**
+     * job of user
+     */
+    var jobPost = MutableLiveData<String>().apply {
+        postValue("")
+    }
+
+    fun setJob(c: CharSequence) {
+        jobPost.postValue(c.toString())
+    }
+
+    /**
+     * name of user
+     */
     var userPost = MutableLiveData<String>().apply {
         postValue("")
     }
+
     fun setUser(c: CharSequence) {
         userPost.postValue(c.toString())
     }
+
+    /**
+     * action cancel
+     */
+    val cancelClicked = SingleLiveEvent<Unit>()
+
+    fun onCancelClicked() {
+        cancelClicked.call()
+    }
+
+    /**
+     * action post
+     */
+    val postClicked = SingleLiveEvent<Unit>()
+
+    fun onPostClicked() {
+        postClicked.call()
+    }
+
+    val userCreated = MutableLiveData<UserCreated>().apply { postValue(null) }
 
 //    var mPostUserDialog: PostNewUserDialog? = null
 //    var mPostUserSuccessDialog: PostNewUserSuccessDialog? = null

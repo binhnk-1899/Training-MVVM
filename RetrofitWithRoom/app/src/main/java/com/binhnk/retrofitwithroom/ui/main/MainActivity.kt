@@ -13,9 +13,9 @@ import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.db.UserDatabase
 import com.binhnk.retrofitwithroom.models.user.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
-import com.binhnk.retrofitwithroom.ui.dialogs.postuser.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
@@ -33,7 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         mOwner = this@MainActivity
 
         viewModel.apply {
-            this.userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
+            userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
                 override fun onItemLongClicked(mUserClicked: User) {
 
                 }
@@ -61,7 +61,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                 }
             })
 
-            viewModel.startStorageActivity.observe(mOwner, Observer {
+            startStorageActivity.observe(mOwner, Observer {
                 val animBundle = ActivityOptions.makeCustomAnimation(
                     mContext,
                     R.anim.anim_enter_rtl,
@@ -72,7 +72,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                 startActivity(storageIntent, animBundle)
             })
 
-            viewModel.usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
+            usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
                 if (it.isNullOrEmpty()) {
                     viewModel.noDataVisible.postValue(View.VISIBLE)
                     viewModel.userAdapter!!.updateAdapter(ArrayList())
@@ -82,13 +82,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                 }
             })
 
-            viewModel.postNewUserClicked.observe(mOwner, Observer<Boolean> {
+            postNewUserClicked.observe(mOwner, Observer<Boolean> {
                 if (it != null && it) {
                     val mPostNewUserDialog = PostNewUserDialog()
                     mPostNewUserDialog.show(supportFragmentManager, "POST")
-
                 }
                 viewModel.postNewUserClicked.postValue(false)
+            })
+
+            noDataVisible.observe(mOwner, Observer {
+                tv_no_data.visibility = it
+            })
+
+            userCreated.observe(mOwner, Observer {
+                if (it != null) {
+                    val mSuccessDialog = PostNewUserSuccessDialog()
+                    mSuccessDialog.show(supportFragmentManager, "SUCCESS")
+                }
             })
         }
 

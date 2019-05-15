@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.dialogs
+package com.binhnk.retrofitwithroom.ui.storage
 
 import android.app.Dialog
 import android.content.Context
