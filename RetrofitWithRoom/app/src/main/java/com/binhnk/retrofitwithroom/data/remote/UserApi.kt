@@ -6,9 +6,12 @@ import retrofit2.Call
 import retrofit2.http.*
 
 
-interface APICallback {
+interface UserApi {
     @GET("api/users")
     fun getAllUsers(@Query("page") page: String): Call<UserResponse>
+
+    @GET("api/users")
+    fun getUsers(@Query("page") page: String): UserResponse
 
     @POST("api/usersLiveData")
     @FormUrlEncoded

@@ -2,7 +2,6 @@ package com.binhnk.retrofitwithroom.data.remote
 
 import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
-import com.binhnk.retrofitwithroom.di.networkModule
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,7 +22,7 @@ class ApiService {
                     .build()
             }
 
-            val call = mRetrofit!!.create(APICallback::class.java)
+            val call = mRetrofit!!.create(UserApi::class.java)
                 .getAllUsers("$page")
             call.enqueue(mCallback)
         }
@@ -41,7 +40,7 @@ class ApiService {
                     .build()
             }
 
-            val call = mRetrofit!!.create(APICallback::class.java)
+            val call = mRetrofit!!.create(UserApi::class.java)
                 .postUser(
                     name,
                     job

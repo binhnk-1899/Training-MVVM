@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
-import com.binhnk.retrofitwithroom.data.remote.APICallback
 import com.binhnk.retrofitwithroom.data.remote.ApiService
+import com.binhnk.retrofitwithroom.data.remote.UserApi
 import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
+import com.binhnk.retrofitwithroom.data.repository.UserRepository
 import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
@@ -18,8 +19,8 @@ import retrofit2.Response
 
 
 class MainActivityViewModel(
-    private val userDAO: UserDAO
-//    private val apiCallback: APICallback
+    private val userDAO: UserDAO,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     /**
@@ -96,26 +97,7 @@ class MainActivityViewModel(
      * load user using retrofit
      */
     private fun loadUsers() {
-//        apiCallback.getAllUsers(currentPage.toString()).enqueue(object : Callback<UserResponse> {
-//            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-//                usersLiveData.postValue(ArrayList())
-//                isRefreshLoading.set(false)
-//            }
-//
-//            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-//                if (response.isSuccessful
-//                    && response.body() != null
-//                ) {
-//                    usersLiveData.postValue(response.body()!!.users)
-//                } else {
-//                    usersLiveData.postValue(ArrayList())
-//                }
-//                isRefreshLoading.set(false)
-//
-//            }
-//
-//        })
-        ApiService.requestGetListUser(currentPage, object : Callback<UserResponse> {
+        userRepository.searchItems(currentPage).enqueue(object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 usersLiveData.postValue(ArrayList())
                 isRefreshLoading.set(false)
