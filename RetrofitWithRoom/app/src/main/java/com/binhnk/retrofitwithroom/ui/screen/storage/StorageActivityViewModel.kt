@@ -1,7 +1,7 @@
 package com.binhnk.retrofitwithroom.ui.screen.storage
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.binhnk.retrofitwithroom.data.constants.Constants.MENU_SORT_NAME_AZ
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
@@ -9,8 +9,8 @@ import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 
 class StorageActivityViewModel(private val userDAO: UserDAO) : BaseViewModel() {
 
-    val noDataVisibility = MutableLiveData<Int>().apply {
-        postValue(View.VISIBLE)
+    val noDataVisibility = MutableLiveData<Boolean>().apply {
+        postValue(true)
     }
     val userList = MutableLiveData<List<User>>().apply {
         Thread(Runnable {
@@ -19,26 +19,38 @@ class StorageActivityViewModel(private val userDAO: UserDAO) : BaseViewModel() {
     }
 
     val onBackPressed = SingleLiveEvent<Unit>()
+    val onMenuPressed = SingleLiveEvent<Unit>()
+    val onCancelPressed = SingleLiveEvent<Unit>()
+    val onCancelConfirmDialogPressed = SingleLiveEvent<Unit>()
+    val onDeletePressed = SingleLiveEvent<Unit>()
+    val onConfirmDeletePressed = SingleLiveEvent<Unit>()
+    val userClicked = MutableLiveData<User>().apply {
+        postValue(null)
+    }
+    val menuItemSelected = MutableLiveData<Int>().apply {
+        postValue(MENU_SORT_NAME_AZ)
+    }
+
     fun callOnBackPressed() {
         onBackPressed.call()
     }
 
-    val onCancelPressed = SingleLiveEvent<Unit>()
+    fun callOnMenuPressed() {
+        onMenuPressed.call()
+    }
+
     fun callOnCancelPressed() {
         onCancelPressed.call()
     }
 
-    val onCancelConfirmDialogPressed = SingleLiveEvent<Unit>()
     fun callOnCancelConfirmDialogPressed() {
         onCancelConfirmDialogPressed.call()
     }
 
-    val onDeletePressed = SingleLiveEvent<Unit>()
     fun callOnDeletePressed() {
         onDeletePressed.call()
     }
 
-    val onConfirmDeletePressed = SingleLiveEvent<Unit>()
     fun callOnConfirmDeletePressed() {
         onConfirmDeletePressed.call()
     }
@@ -52,7 +64,8 @@ class StorageActivityViewModel(private val userDAO: UserDAO) : BaseViewModel() {
         }
     }
 
-    val userClicked = MutableLiveData<User>().apply {
-        postValue(null)
+    fun setMenuItemSelected(value: Int) {
+        menuItemSelected.postValue(value)
     }
+
 }

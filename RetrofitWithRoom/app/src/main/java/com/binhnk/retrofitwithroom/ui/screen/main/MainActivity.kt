@@ -67,10 +67,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
             usersLiveData.observe(mOwner, Observer<ArrayList<User>> {
                 if (it.isNullOrEmpty()) {
-                    viewModel.noDataVisible.postValue(View.VISIBLE)
+                    viewModel.noDataVisible.postValue(true)
                     viewModel.userAdapter!!.updateAdapter(ArrayList())
                 } else {
-                    viewModel.noDataVisible.postValue(View.GONE)
+                    viewModel.noDataVisible.postValue(false)
                     viewModel.userAdapter!!.updateAdapter(it)
                 }
             })
@@ -84,7 +84,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             })
 
             noDataVisible.observe(mOwner, Observer {
-                tv_no_data.visibility = it
+                if (it) {
+                    tv_no_data.visibility = View.VISIBLE
+                } else {
+                    tv_no_data.visibility = View.GONE
+                }
             })
 
             userCreated.observe(mOwner, Observer {

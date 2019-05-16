@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
     // JSON Parsing
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
@@ -74,4 +75,7 @@ dependencies {
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
+
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxjava:2.2.2"
 }

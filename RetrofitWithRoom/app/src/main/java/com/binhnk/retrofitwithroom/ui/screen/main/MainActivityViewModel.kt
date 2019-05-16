@@ -1,6 +1,5 @@
 package com.binhnk.retrofitwithroom.ui.screen.main
 
-import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
@@ -21,11 +20,57 @@ class MainActivityViewModel(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
+    var currentPage: Int = -1
+    val isRefreshLoading = ObservableField<Boolean>().apply {
+        set(false)
+    }
+    val startStorageActivity = SingleLiveEvent<Unit>()
+
+    val postNewUserClicked = MutableLiveData<Boolean>()
+        .apply {
+            postValue(false)
+        }
+
+    val usersLiveData: MutableLiveData<ArrayList<User>> = MutableLiveData()
+
+    val noDataVisible = MutableLiveData<Boolean>()
+        .apply {
+            postValue(
+                usersLiveData.value.isNullOrEmpty()
+            )
+        }
+
+    private val jobPost = MutableLiveData<String>().apply {
+        postValue("")
+    }
+
+    val postClicked = SingleLiveEvent<Unit>()
+
+    var userPost = MutableLiveData<String>().apply {
+        postValue("")
+    }
+
+    val cancelClicked = SingleLiveEvent<Unit>()
+
+    val postUserFailure = SingleLiveEvent<Unit>()
+
+    val postUserSuccess = SingleLiveEvent<Unit>()
+
+    val postUserUnSuccess = SingleLiveEvent<Unit>()
+
+    /**
+     * user created
+     */
+    val userCreated = MutableLiveData<UserCreated>().apply { postValue(null) }
+
+    /**
+     * user adapter
+     */
+    var userAdapter: UserAdapter? = null
+
     /**
      * currentPage live data
      */
-    var currentPage: Int = 0
-
     fun setValueForCurrentPage(s: CharSequence) {
         currentPage = if (s.toString() != "") {
             s.toString().toInt()
@@ -37,10 +82,6 @@ class MainActivityViewModel(
     /**
      * isLoading live data
      */
-    val isRefreshLoading = ObservableField<Boolean>().apply {
-        set(false)
-    }
-
     fun callRefreshLoading() {
         isRefreshLoading.set(true)
         loadUsers()
@@ -49,8 +90,6 @@ class MainActivityViewModel(
     /**
      * start StorageActivity live data
      */
-    val startStorageActivity = SingleLiveEvent<Unit>()
-
     fun setStartStorageActivity() {
         startStorageActivity.call()
     }
@@ -58,38 +97,9 @@ class MainActivityViewModel(
     /**
      * post new user live data
      */
-    val postNewUserClicked = MutableLiveData<Boolean>()
-        .apply {
-            postValue(false)
-        }
-
     fun setPostNewUserClicked(b: Boolean) {
         postNewUserClicked.postValue(b)
     }
-
-    /**
-     * userList live data
-     */
-    var usersLiveData: MutableLiveData<ArrayList<User>> = MutableLiveData()
-
-    /**
-     * tvNoData visible live data
-     */
-    var noDataVisible = MutableLiveData<Int>()
-        .apply {
-            postValue(
-                if (usersLiveData.value.isNullOrEmpty()) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
-            )
-        }
-
-    /**
-     * user adapter
-     */
-    var userAdapter: UserAdapter? = null
 
     /**
      * load user using retrofit
@@ -117,12 +127,8 @@ class MainActivityViewModel(
     }
 
     /**
-     * job of user
+     * set job of user
      */
-    var jobPost = MutableLiveData<String>().apply {
-        postValue("")
-    }
-
     fun setJob(c: CharSequence) {
         jobPost.postValue(c.toString())
     }
@@ -130,10 +136,6 @@ class MainActivityViewModel(
     /**
      * name of user
      */
-    var userPost = MutableLiveData<String>().apply {
-        postValue("")
-    }
-
     fun setUser(c: CharSequence) {
         userPost.postValue(c.toString())
     }
@@ -141,8 +143,6 @@ class MainActivityViewModel(
     /**
      * action cancel
      */
-    val cancelClicked = SingleLiveEvent<Unit>()
-
     fun onCancelClicked() {
         cancelClicked.call()
     }
@@ -150,8 +150,6 @@ class MainActivityViewModel(
     /**
      * action post
      */
-    val postClicked = SingleLiveEvent<Unit>()
-
     fun onPostClicked() {
         postClicked.call()
         userRepository.postUser(userPost.value!!, jobPost.value!!)
@@ -176,15 +174,6 @@ class MainActivityViewModel(
 
             })
     }
-
-    val postUserFailure = SingleLiveEvent<Unit>()
-    val postUserSuccess = SingleLiveEvent<Unit>()
-    val postUserUnSuccess = SingleLiveEvent<Unit>()
-
-    /**
-     * user created
-     */
-    val userCreated = MutableLiveData<UserCreated>().apply { postValue(null) }
 
     /**
      * add user to database
