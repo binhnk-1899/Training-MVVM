@@ -8,13 +8,19 @@ import java.util.*
 
 class UserViewModel : BaseObservable() {
 
+//    @get:Bindable
+//    var userIds: MutableList<Long> = mutableListOf()
+//        private set(value) {
+//            field = value
+//            notifyPropertyChanged(BR.userIds)
+//        }
+
     @get:Bindable
-    var userIds: MutableList<Long> = mutableListOf()
+    var users: MutableList<User> = mutableListOf()
         private set(value) {
             field = value
-            notifyPropertyChanged(BR.userIds)
+            notifyPropertyChanged(BR.users)
         }
-
 
     @get:Bindable
     var changedPositions: Set<Int> = mutableSetOf()
@@ -37,10 +43,10 @@ class UserViewModel : BaseObservable() {
 
     private fun updateList() {
         val pos1 = random.nextInt(30)
-        userIds[pos1]  = random.nextLong()
+        users[pos1]  = User(random.nextLong(), "User ${random.nextLong()}")
 
         val pos2 = random.nextInt(30)
-        userIds[pos2] = random.nextLong()
+        users[pos2]  = User(random.nextLong(), "User ${random.nextLong()}")
 
         changedPositions = setOf(pos1, pos2)
     }
@@ -51,8 +57,8 @@ class UserViewModel : BaseObservable() {
     }
 
     private fun initList() {
-        userIds = MutableList(30) {
-            random.nextLong()
+        users = MutableList<User>(30) {
+            User(random.nextLong(), "User ${random.nextLong()}")
         }
     }
 

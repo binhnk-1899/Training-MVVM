@@ -13,7 +13,8 @@ import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.databinding.ActivityStorageBinding
 import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
-import com.binhnk.retrofitwithroom.utils.Utils
+import com.binhnk.retrofitwithroom.ui.screen.storage.dialog.RemoveConfirmDialog
+import com.binhnk.retrofitwithroom.ui.screen.storage.dialog.UserInfoDialog
 import kotlinx.android.synthetic.main.activity_storage.*
 import org.koin.androidx.viewmodel.ext.viewModel
 
@@ -26,9 +27,11 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
     private var mInfoDialog: UserInfoDialog? = null
 
     private var mUserAdapter: UserAdapter? = null
-//    private var mAdapter: com.binhnk.retrofitwithroom.ui.screen.main.UserAdapter? = null
+
+//    private var mUserInfoAdapter: UserInfoAdapter? = null
 
     override val viewModel: StorageActivityViewModel by viewModel()
+
     override val layoutId: Int
         get() = R.layout.activity_storage
 
@@ -52,12 +55,11 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                     noDataVisibility.postValue(true)
                     ArrayList()
                 }
+
+//                userViewModel.setData(it)
                 if (mUserAdapter != null) {
                     mUserAdapter!!.updateAdapter(data)
                 }
-//                if (mAdapter != null) {
-//                    mAdapter!!.updateAdapter(data)
-//                }
             })
 
             noDataVisibility.observe(mOwner, Observer {
@@ -77,7 +79,8 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                     }
                 }
                 if (mConfirmDialog == null) {
-                    mConfirmDialog = RemoveConfirmDialog()
+                    mConfirmDialog =
+                        RemoveConfirmDialog()
                 }
                 mConfirmDialog!!.show(supportFragmentManager, "CONFIRM")
             })
@@ -102,7 +105,9 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     true
                 )
-                pw.showAsDropDown(im_menu)
+                pw.showAsDropDown(im_menu,
+                    0,
+                    -(resources.getDimensionPixelSize(R.dimen._10sdp)))
             })
 
             onBackPressed.observe(mOwner, Observer {
@@ -112,16 +117,19 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
 
     }
 
+
+//    private val userViewModel = UserViewModel()
+
     /**
      * init rv adapter
      */
     private fun initRvAdapter() {
-//        mAdapter = com.binhnk.retrofitwithroom.ui.screen.main.UserAdapter()
         mUserAdapter = UserAdapter(this@StorageActivity, object : UserAdapter.Callback {
             override fun onItemClicked(mUserClicked: User) {
                 viewModel.userClicked.postValue(mUserClicked)
                 if (mInfoDialog == null) {
-                    mInfoDialog = UserInfoDialog()
+                    mInfoDialog =
+                        UserInfoDialog()
                 }
                 mInfoDialog!!.show(supportFragmentManager, "INFO")
             }
@@ -132,6 +140,10 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
 
         })
         rv_user_storage.adapter = mUserAdapter
+
+//        mUserInfoAdapter = UserInfoAdapter()
+//        rv_user_storage.adapter = mUserInfoAdapter
+//        viewBinding.userViewModel = userViewModel
     }
 
     override fun onBackPressed() {

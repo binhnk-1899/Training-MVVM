@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.screen.storage
+package com.binhnk.retrofitwithroom.ui.screen.storage.dialog
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.databinding.DialogUserInfoBinding
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
+import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.dialog_user_info.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel

@@ -12,6 +12,8 @@ import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
+import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserDialog
+import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserSuccessDialog
 import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
@@ -77,7 +79,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
             postNewUserClicked.observe(mOwner, Observer<Boolean> {
                 if (it != null && it) {
-                    val mPostNewUserDialog = PostNewUserDialog()
+                    val mPostNewUserDialog =
+                        PostNewUserDialog()
                     mPostNewUserDialog.show(supportFragmentManager, "POST")
                 }
                 viewModel.postNewUserClicked.postValue(false)
@@ -93,7 +96,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
             userCreated.observe(mOwner, Observer {
                 if (it != null) {
-                    val mSuccessDialog = PostNewUserSuccessDialog()
+                    val mSuccessDialog =
+                        PostNewUserSuccessDialog()
                     mSuccessDialog.show(supportFragmentManager, "SUCCESS")
                 }
             })

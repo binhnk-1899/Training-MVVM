@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>(), BindableAdapter<Long> {
+class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>(), BindableAdapter<User> {
 
-    override fun setData(items: List<Long>) {
+    override fun setData(items: List<User>) {
         userIds = items
         notifyDataSetChanged()
     }
@@ -17,7 +17,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>(), BindableAdap
         positions.forEach(this::notifyItemChanged)
     }
 
-    var userIds = emptyList<Long>()
+    var userIds = emptyList<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,8 +32,9 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>(), BindableAdap
 
     class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(userId: Long) {
-            itemView.userText.text = "User id: $userId"
+        fun bind(user: User) {
+            itemView.userID.text = "User id: ${user.id}"
+            itemView.userName.text = "User id: ${user.name}"
         }
     }
 

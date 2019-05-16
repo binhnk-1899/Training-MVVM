@@ -1,10 +1,11 @@
-package com.binhnk.retrofitwithroom.ui.screen.storage
+package com.binhnk.retrofitwithroom.ui.screen.storage.dialog
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
+import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 
 class RemoveConfirmDialog : BaseDialogFragment<com.binhnk.retrofitwithroom.databinding.DialogConfirmRemoveBinding>(){

@@ -8,6 +8,7 @@
         <variable
             name="viewModel"
             type="com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,6 +89,17 @@
             bind:layout_constraintEnd_toEndOf="parent"
             bind:layout_constraintStart_toStartOf="parent"
             bind:layout_constraintTop_toBottomOf="@+id/layout_toolbar" />
+
+        <!--<androidx.recyclerview.widget.RecyclerView-->
+        <!--android:id="@+id/rv_user_storage"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--bind:data="@{userViewModel.users}"-->
+        <!--bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+        <!--bind:layout_constraintEnd_toEndOf="parent"-->
+        <!--bind:layout_constraintStart_toStartOf="parent"-->
+        <!--bind:layout_constraintTop_toBottomOf="@+id/layout_toolbar" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

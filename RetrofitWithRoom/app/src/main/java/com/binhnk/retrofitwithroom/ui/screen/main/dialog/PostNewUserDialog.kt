@@ -1,16 +1,18 @@
-package com.binhnk.retrofitwithroom.ui.screen.main
+package com.binhnk.retrofitwithroom.ui.screen.main.dialog
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.databinding.DialogPostSuccessBinding
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
+import com.binhnk.retrofitwithroom.ui.screen.main.MainActivityViewModel
 import org.koin.androidx.viewmodel.ext.sharedViewModel
 
-class PostNewUserSuccessDialog : BaseDialogFragment<DialogPostSuccessBinding>() {
+class PostNewUserDialog :
+    BaseDialogFragment<com.binhnk.retrofitwithroom.databinding.DialogPostNewUserBinding>() {
+
     override val layoutId: Int
-        get() = R.layout.dialog_post_success
+        get() = R.layout.dialog_post_new_user
 
     private val mViewModel by sharedViewModel<MainActivityViewModel>()
 
@@ -20,9 +22,11 @@ class PostNewUserSuccessDialog : BaseDialogFragment<DialogPostSuccessBinding>() 
         viewBinding.viewModel = mViewModel
 
         mViewModel.apply {
-            cancelClicked.observe(this@PostNewUserSuccessDialog, Observer {
+            cancelClicked.observe(this@PostNewUserDialog, Observer {
                 dismiss()
-                userCreated.postValue(null)
+            })
+            postClicked.observe(this@PostNewUserDialog, Observer {
+                dismiss()
             })
         }
     }

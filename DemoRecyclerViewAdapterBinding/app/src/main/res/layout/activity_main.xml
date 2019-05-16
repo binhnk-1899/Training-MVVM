@@ -14,7 +14,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:data="@{viewModel.userIds}"
+                app:data="@{viewModel.users}"
                 app:changedPositions="@{viewModel.changedPositions}"/>
 
     </FrameLayout>

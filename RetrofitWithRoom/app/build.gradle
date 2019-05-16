@@ -78,4 +78,6 @@ dependencies {
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"
+
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 }
