@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
         val mTimeData = TimeData(System.currentTimeMillis())
+
+        val timeDisplay = TimeDisplay(mTimeData)
+        timeDisplay.display()
     }
 
     private fun startRStream() {

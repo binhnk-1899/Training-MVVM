@@ -32,8 +32,8 @@ class TimeData(var ms: Long) : Subject {
         measurementsChanged()
     }
 
-    fun convertTimeToDate() {
-        String.format("%02d:%02d:%02d",
+    fun convertTimeToDate() :String{
+        return String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(this.ms),
                 TimeUnit.MILLISECONDS.toMinutes(this.ms) -
                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(this.ms)),
