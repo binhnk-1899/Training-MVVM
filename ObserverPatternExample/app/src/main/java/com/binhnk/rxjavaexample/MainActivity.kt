@@ -1,6 +1,7 @@
 package com.binhnk.rxjavaexample
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
@@ -12,15 +13,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val mTimeData = TimeData(System.currentTimeMillis())
+
         supportFragmentManager.beginTransaction()
-                .add(R.id.layout_container_1, OneFragment())
+                .add(R.id.layout_container_1, OneFragment(mTimeData))
                 .add(R.id.layout_container_2, TwoFragment())
                 .commit()
 
-        val mTimeData = TimeData(System.currentTimeMillis())
-
-        val timeDisplay = TimeDisplay(mTimeData)
-        timeDisplay.display()
+        Handler().postDelayed({
+            mTimeData.setMeasurements(System.currentTimeMillis())
+        }, 5000)
     }
 
     private fun startRStream() {
