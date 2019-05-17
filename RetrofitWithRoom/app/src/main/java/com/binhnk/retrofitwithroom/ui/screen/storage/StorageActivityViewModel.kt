@@ -7,7 +7,7 @@ import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 
-class StorageActivityViewModel(private val userDAO: UserDAO) : BaseViewModel() {
+class StorageActivityViewModel(val userDAO: UserDAO) : BaseViewModel() {
 
     val noDataVisibility = MutableLiveData<Boolean>().apply {
         postValue(true)

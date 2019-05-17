@@ -1,5 +1,7 @@
 package com.binhnk.retrofitwithroom.ui.screen.main
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
@@ -16,7 +18,7 @@ import retrofit2.Response
 
 
 class MainActivityViewModel(
-    private val userDAO: UserDAO,
+    val userDAO: UserDAO,
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
@@ -58,6 +60,11 @@ class MainActivityViewModel(
 
     val postUserUnSuccess = SingleLiveEvent<Unit>()
 
+    val addUserToDBSuccess = MutableLiveData<Int>().apply {
+        postValue(-1)
+    }
+    val addUserToDBFailure = SingleLiveEvent<Unit>()
+
     /**
      * user created
      */
@@ -75,7 +82,7 @@ class MainActivityViewModel(
         currentPage = if (s.toString() != "") {
             s.toString().toInt()
         } else {
-            0
+            -1
         }
     }
 
@@ -105,25 +112,32 @@ class MainActivityViewModel(
      * load user using retrofit
      */
     private fun loadUsers() {
-        userRepository.getUsers(currentPage).enqueue(object : Callback<UserResponse> {
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                usersLiveData.postValue(ArrayList())
-                isRefreshLoading.set(false)
-            }
-
-            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                if (response.isSuccessful
-                    && response.body() != null
-                ) {
-                    usersLiveData.postValue(response.body()!!.users)
-                } else {
+        if (currentPage >= 0) {
+            userRepository.getUsers(currentPage).enqueue(object : Callback<UserResponse> {
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     usersLiveData.postValue(ArrayList())
+                    isRefreshLoading.set(false)
                 }
-                isRefreshLoading.set(false)
 
-            }
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    if (response.isSuccessful
+                        && response.body() != null
+                    ) {
+                        usersLiveData.postValue(response.body()!!.users)
+                    } else {
+                        usersLiveData.postValue(ArrayList())
+                    }
+                    isRefreshLoading.set(false)
+                }
 
-        })
+            })
+        } else {
+            usersLiveData.postValue(ArrayList())
+            isRefreshLoading.set(false)
+        }
     }
 
     /**
@@ -178,7 +192,28 @@ class MainActivityViewModel(
     /**
      * add user to database
      */
-    fun addUserToDB(user: User): Long {
-        return userDAO.insertUser(user)
+    @SuppressLint("StaticFieldLeak")
+    fun addUserToDB(user: User) {
+        object : AsyncTask<User, Void, Long>() {
+            override fun doInBackground(vararg params: User?): Long {
+                if (params[0] != null) {
+                    return userDAO.insertUser(user)
+                }
+                return -1L
+            }
+
+            override fun onPostExecute(result: Long?) {
+                super.onPostExecute(result)
+                if (result != null) {
+                    if (result > 0) {
+                        addUserToDBSuccess.postValue(user.id)
+                    } else {
+                        addUserToDBFailure.call()
+                    }
+                } else {
+                    addUserToDBFailure.call()
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, user)
     }
 }

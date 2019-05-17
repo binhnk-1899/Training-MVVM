@@ -20,15 +20,13 @@ import org.koin.androidx.viewmodel.ext.viewModel
 
 
 class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityViewModel>() {
-
+    private lateinit var mContext: Context
     private lateinit var mOwner: LifecycleOwner
 
     private var mConfirmDialog: RemoveConfirmDialog? = null
     private var mInfoDialog: UserInfoDialog? = null
 
     private var mUserAdapter: UserAdapter? = null
-
-//    private var mUserInfoAdapter: UserInfoAdapter? = null
 
     override val viewModel: StorageActivityViewModel by viewModel()
 
@@ -37,6 +35,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mContext = this@StorageActivity
         mOwner = this@StorageActivity
 
         initRvAdapter()
@@ -56,7 +55,6 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                     ArrayList()
                 }
 
-//                userViewModel.setData(it)
                 if (mUserAdapter != null) {
                     mUserAdapter!!.updateAdapter(data)
                 }
@@ -105,9 +103,11 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     true
                 )
-                pw.showAsDropDown(im_menu,
+                pw.showAsDropDown(
+                    im_menu,
                     0,
-                    -(resources.getDimensionPixelSize(R.dimen._10sdp)))
+                    -(resources.getDimensionPixelSize(R.dimen._10sdp))
+                )
             })
 
             onBackPressed.observe(mOwner, Observer {
@@ -118,13 +118,14 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
     }
 
 
-//    private val userViewModel = UserViewModel()
-
     /**
      * init rv adapter
      */
     private fun initRvAdapter() {
-        mUserAdapter = UserAdapter(this@StorageActivity, object : UserAdapter.Callback {
+        mUserAdapter = UserAdapter(mContext,
+            viewModel.userDAO,
+            false,
+            object : UserAdapter.Callback {
             override fun onItemClicked(mUserClicked: User) {
                 viewModel.userClicked.postValue(mUserClicked)
                 if (mInfoDialog == null) {
@@ -135,15 +136,11 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
             }
 
             override fun onItemLongClicked(mUserClicked: User) {
-
+                // do nothing
             }
 
         })
         rv_user_storage.adapter = mUserAdapter
-
-//        mUserInfoAdapter = UserInfoAdapter()
-//        rv_user_storage.adapter = mUserInfoAdapter
-//        viewBinding.userViewModel = userViewModel
     }
 
     override fun onBackPressed() {

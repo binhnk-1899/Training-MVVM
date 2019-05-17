@@ -14,4 +14,8 @@ object Constants {
     const val MENU_SORT_NAME_AZ = 0
     const val MENU_SORT_NAME_ZA = 1
     const val MENU_SORT_ID = 2
+
+    const val STATE_CREATING = 0
+    const val STATE_CREATE_FAILED = 1
+    const val STATE_CREATE_SUCCESS = 2
 }

@@ -15,4 +15,7 @@
     <string name="user_information">USER INFORMATION</string>
     <string name="delete_user">Delete user</string>
     <string name="delete">Delete</string>
+    <string name="user_creating">User creating...</string>
+    <string name="user_create_failed">User create failed</string>
+    <string name="check_your_connection_and_try_again">Check your connection and try again.</string>
 </resources>

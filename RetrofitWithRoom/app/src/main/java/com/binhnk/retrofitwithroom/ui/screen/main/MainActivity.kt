@@ -8,16 +8,17 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
-import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
 import com.binhnk.retrofitwithroom.data.model.User
+import com.binhnk.retrofitwithroom.databinding.ActivityMainBinding
+import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserDialog
-import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserSuccessDialog
+import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostStateDialog
 import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivity
 import com.binhnk.retrofitwithroom.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.viewModel
+import kotlin.math.absoluteValue
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
 
@@ -28,32 +29,43 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override val layoutId: Int
         get() = R.layout.activity_main
 
+    private var mPostNewUserDialog: PostNewUserDialog? = null
+    private var mPostStateDialog: PostStateDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this@MainActivity
         mOwner = this@MainActivity
 
         viewModel.apply {
-            userAdapter = UserAdapter(mContext, object : UserAdapter.Callback {
-                override fun onItemLongClicked(mUserClicked: User) {
-                    // do nothing
-                }
+            userAdapter = UserAdapter(mContext,
+                viewModel.userDAO,
+                true,
+                object : UserAdapter.Callback {
+                    override fun onItemLongClicked(mUserClicked: User) {
+                        // do nothing
+                    }
 
-                override fun onItemClicked(mUserClicked: User) {
-                    Thread(Runnable {
-                        val result = addUserToDB(mUserClicked)
-                        runOnUiThread {
-                            Utils.shortToast(
-                                mContext,
-                                if (result > 0) {
-                                    "User has been add to database"
-                                } else {
-                                    "User has been exist in database"
-                                }
-                            )
-                        }
-                    }).start()
+                    override fun onItemClicked(mUserClicked: User) {
+                        addUserToDB(mUserClicked)
+                    }
+                })
+
+            addUserToDBSuccess.observe(mOwner, Observer {
+                if (it != -1) {
+                    Utils.shortToast(
+                        mContext,
+                        "User has been add to database"
+                    )
+                    userAdapter?.updateCheckingState(it.absoluteValue)
                 }
+            })
+
+            addUserToDBFailure.observe(mOwner, Observer {
+                Utils.shortToast(
+                    mContext,
+                    "User has been exist in database"
+                )
             })
 
             startStorageActivity.observe(mOwner, Observer {
@@ -79,9 +91,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
             postNewUserClicked.observe(mOwner, Observer<Boolean> {
                 if (it != null && it) {
-                    val mPostNewUserDialog =
-                        PostNewUserDialog()
-                    mPostNewUserDialog.show(supportFragmentManager, "POST")
+                    if (mPostNewUserDialog == null) {
+                        mPostNewUserDialog = PostNewUserDialog()
+                    }
+                    mPostNewUserDialog!!.show(supportFragmentManager, "POST")
                 }
                 viewModel.postNewUserClicked.postValue(false)
             })
@@ -94,22 +107,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                 }
             })
 
-            userCreated.observe(mOwner, Observer {
-                if (it != null) {
-                    val mSuccessDialog =
-                        PostNewUserSuccessDialog()
-                    mSuccessDialog.show(supportFragmentManager, "SUCCESS")
+            postClicked.observe(mOwner, Observer {
+                if (mPostNewUserDialog != null) {
+                    mPostNewUserDialog!!.dismiss()
                 }
-            })
-
-            postUserFailure.observe(mOwner, Observer {
-                Utils.shortToast(mContext, "Post user failure")
-            })
-            postUserSuccess.observe(mOwner, Observer {
-
-            })
-            postUserUnSuccess.observe(mOwner, Observer {
-                Utils.shortToast(mContext, "Post user unsuccessful")
+                if (mPostStateDialog == null) {
+                    mPostStateDialog =
+                        PostStateDialog()
+                }
+                mPostStateDialog!!.show(supportFragmentManager, "POSTING")
             })
         }
 

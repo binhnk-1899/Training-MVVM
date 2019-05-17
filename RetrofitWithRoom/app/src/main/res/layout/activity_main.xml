@@ -132,7 +132,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     bind:onRefreshListener="@{()-> viewModel.callRefreshLoading()}"
-                    bind:refreshing="@{viewModel.isRefreshLoading}">
+                    bind:refreshing="@{viewModel.isRefreshLoading.get()}">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_user"
