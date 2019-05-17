@@ -43,7 +43,6 @@
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:padding="@dimen/_3sdp"
         android:src="@drawable/ic_database_add_check"
         app:layout_constraintBottom_toBottomOf="@id/im_avatar"
         app:layout_constraintEnd_toEndOf="parent"

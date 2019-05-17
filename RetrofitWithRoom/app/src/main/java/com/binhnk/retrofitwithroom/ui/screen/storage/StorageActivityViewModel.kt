@@ -1,5 +1,6 @@
 package com.binhnk.retrofitwithroom.ui.screen.storage
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.constants.Constants.MENU_SORT_NAME_AZ
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
@@ -12,21 +13,30 @@ class StorageActivityViewModel(val userDAO: UserDAO) : BaseViewModel() {
     val noDataVisibility = MutableLiveData<Boolean>().apply {
         postValue(true)
     }
-    val userList = MutableLiveData<List<User>>().apply {
+    val userList = MutableLiveData<ArrayList<User>>().apply {
         Thread(Runnable {
-            this.postValue(userDAO.getALlUser())
+            postValue(ArrayList(userDAO.getALlUser()))
         }).start()
     }
 
     val onBackPressed = SingleLiveEvent<Unit>()
+
     val onMenuPressed = SingleLiveEvent<Unit>()
+
     val onCancelPressed = SingleLiveEvent<Unit>()
+
     val onCancelConfirmDialogPressed = SingleLiveEvent<Unit>()
+
     val onDeletePressed = SingleLiveEvent<Unit>()
+
     val onConfirmDeletePressed = SingleLiveEvent<Unit>()
+
     val userClicked = MutableLiveData<User>().apply {
         postValue(null)
     }
+
+    val userHasDeleted = SingleLiveEvent<Unit>()
+
     val menuItemSelected = MutableLiveData<Int>().apply {
         postValue(MENU_SORT_NAME_AZ)
     }
@@ -55,15 +65,23 @@ class StorageActivityViewModel(val userDAO: UserDAO) : BaseViewModel() {
         onConfirmDeletePressed.call()
     }
 
+    /**
+     * remove user from db
+     */
     fun removeUserFromDB() {
         if (userClicked.value != null) {
             Thread(Runnable {
-                userDAO.deleteUser(userClicked.value!!)
-                userList.postValue(userDAO.getALlUser())
+                if (userDAO.deleteUser(userClicked.value!!) > 0) {
+                    userHasDeleted.postCall()
+                    userList.postValue(ArrayList(userDAO.getALlUser()))
+                }
             }).start()
         }
     }
 
+    /**
+     * set menu item selected
+     */
     fun setMenuItemSelected(value: Int) {
         menuItemSelected.postValue(value)
     }

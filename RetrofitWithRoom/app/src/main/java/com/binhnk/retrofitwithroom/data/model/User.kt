@@ -12,8 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.Glide
 import androidx.databinding.BindingAdapter
 
-
-
 @Entity(tableName = "usersLiveData")
 class User(
     @PrimaryKey(autoGenerate = false)

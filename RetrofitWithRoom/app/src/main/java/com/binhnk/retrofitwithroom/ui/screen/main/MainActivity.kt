@@ -1,8 +1,10 @@
 package com.binhnk.retrofitwithroom.ui.screen.main
 
 import android.app.ActivityOptions
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
@@ -31,6 +33,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
     private var mPostNewUserDialog: PostNewUserDialog? = null
     private var mPostStateDialog: PostStateDialog? = null
+
+    private lateinit var mReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,5 +123,26 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             })
         }
 
+        mReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                when (intent!!.action) {
+                    "com.update.database" -> {
+                        if (viewModel.userAdapter != null) {
+                            if (viewModel.userAdapter!!.itemCount > 0)
+                                for (i in 0 until viewModel.userAdapter!!.itemCount) {
+                                    viewModel.userAdapter?.notifyItemChanged(i, "update_check")
+                                }
+                        }
+                    }
+                }
+            }
+
+        }
+        registerReceiver(mReceiver, IntentFilter("com.update.database"))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(mReceiver)
     }
 }

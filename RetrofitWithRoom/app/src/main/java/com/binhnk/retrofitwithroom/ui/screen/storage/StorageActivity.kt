@@ -1,6 +1,7 @@
 package com.binhnk.retrofitwithroom.ui.screen.storage
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,22 +43,21 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
 
         viewModel.apply {
             userList.observe(mOwner, Observer {
-                val data = if (it != null) {
-                    if (it.isEmpty()) {
-                        noDataVisibility.postValue(true)
-                        ArrayList()
-                    } else {
-                        noDataVisibility.postValue(false)
-                        ArrayList(it)
-                    }
-                } else {
+                val data = if (it.isNullOrEmpty()) {
                     noDataVisibility.postValue(true)
                     ArrayList()
+                } else {
+                    noDataVisibility.postValue(false)
+                    it
                 }
 
                 if (mUserAdapter != null) {
                     mUserAdapter!!.updateAdapter(data)
                 }
+            })
+
+            userHasDeleted.observe(mOwner, Observer {
+                sendBroadcast(Intent("com.update.database"))
             })
 
             noDataVisibility.observe(mOwner, Observer {
@@ -126,20 +126,20 @@ class StorageActivity : BaseActivity<ActivityStorageBinding, StorageActivityView
             viewModel.userDAO,
             false,
             object : UserAdapter.Callback {
-            override fun onItemClicked(mUserClicked: User) {
-                viewModel.userClicked.postValue(mUserClicked)
-                if (mInfoDialog == null) {
-                    mInfoDialog =
-                        UserInfoDialog()
+                override fun onItemClicked(mUserClicked: User) {
+                    viewModel.userClicked.postValue(mUserClicked)
+                    if (mInfoDialog == null) {
+                        mInfoDialog =
+                            UserInfoDialog()
+                    }
+                    mInfoDialog!!.show(supportFragmentManager, "INFO")
                 }
-                mInfoDialog!!.show(supportFragmentManager, "INFO")
-            }
 
-            override fun onItemLongClicked(mUserClicked: User) {
-                // do nothing
-            }
+                override fun onItemLongClicked(mUserClicked: User) {
+                    // do nothing
+                }
 
-        })
+            })
         rv_user_storage.adapter = mUserAdapter
     }
 

@@ -127,7 +127,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.binhnk.retrofitwithroom.utils.CustomSwipeRefreshLayout
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipe_refresh_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         bind:adapter="@{viewModel.userAdapter}"
                         bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </com.binhnk.retrofitwithroom.utils.CustomSwipeRefreshLayout>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </FrameLayout>
         </RelativeLayout>
     </LinearLayout>
