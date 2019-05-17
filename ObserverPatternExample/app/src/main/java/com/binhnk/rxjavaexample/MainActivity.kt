@@ -12,9 +12,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button.setOnClickListener {
-            startRStream()
-        }
+        supportFragmentManager.beginTransaction()
+                .add(R.id.layout_container_1, OneFragment())
+                .add(R.id.layout_container_2, TwoFragment())
+                .commit()
+
+        val mTimeData = TimeData(System.currentTimeMillis())
     }
 
     private fun startRStream() {
