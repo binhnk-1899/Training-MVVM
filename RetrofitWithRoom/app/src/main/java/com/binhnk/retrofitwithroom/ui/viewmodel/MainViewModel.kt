@@ -1,8 +1,7 @@
-package com.binhnk.retrofitwithroom.ui.screen.main
+package com.binhnk.retrofitwithroom.ui.viewmodel
 
 import android.annotation.SuppressLint
 import android.os.AsyncTask
-import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
@@ -17,16 +16,16 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivityViewModel(
+class MainViewModel(
     val userDAO: UserDAO,
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     var currentPage: Int = -1
-    val isRefreshLoading = ObservableField<Boolean>().apply {
-        set(false)
+    val isRefreshLoading = MutableLiveData<Boolean>().apply {
+        postValue(false)
     }
-    val startStorageActivity = SingleLiveEvent<Unit>()
+    val goToStorage = SingleLiveEvent<Unit>()
 
     val postNewUserClicked = MutableLiveData<Boolean>()
         .apply {
@@ -90,7 +89,7 @@ class MainActivityViewModel(
      * isLoading live data
      */
     fun callRefreshLoading() {
-        isRefreshLoading.set(true)
+        isRefreshLoading.postValue(true)
         loadUsers()
     }
 
@@ -98,7 +97,7 @@ class MainActivityViewModel(
      * start StorageActivity live data
      */
     fun setStartStorageActivity() {
-        startStorageActivity.call()
+        goToStorage.call()
     }
 
     /**
@@ -116,7 +115,7 @@ class MainActivityViewModel(
             userRepository.getUsers(currentPage).enqueue(object : Callback<UserResponse> {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     usersLiveData.postValue(ArrayList())
-                    isRefreshLoading.set(false)
+                    isRefreshLoading.postValue(false)
                 }
 
                 override fun onResponse(
@@ -130,13 +129,13 @@ class MainActivityViewModel(
                     } else {
                         usersLiveData.postValue(ArrayList())
                     }
-                    isRefreshLoading.set(false)
+                    isRefreshLoading.postValue(false)
                 }
 
             })
         } else {
             usersLiveData.postValue(ArrayList())
-            isRefreshLoading.set(false)
+            isRefreshLoading.postValue(false)
         }
     }
 

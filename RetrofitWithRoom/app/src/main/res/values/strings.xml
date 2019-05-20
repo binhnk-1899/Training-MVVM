@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Retrofit LiveData Room</string>
+    <string name="app_name">MVVM Architecture</string>
     <string name="get_data">get data</string>
     <string name="page_number">Page number (1–4)</string>
     <string name="do_you_want_to_remove_this_user_from_database">Do you want to remove this user from database?</string>
@@ -24,4 +24,5 @@
     <string name="connect_timeout">Connect Timeout</string>
     <string name="force_update_app">Please update app</string>
     <string name="server_maintain_message">Server maintain, please try again later</string>
+    <string name="no_data">No data</string>
 </resources>

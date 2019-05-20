@@ -6,6 +6,7 @@ import com.binhnk.retrofitwithroom.data.constants.Constants
 import com.binhnk.retrofitwithroom.data.remote.UserApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,7 +48,7 @@ fun createWebService(okHttpClient: OkHttpClient): Retrofit {
         .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
-//        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 }
 
