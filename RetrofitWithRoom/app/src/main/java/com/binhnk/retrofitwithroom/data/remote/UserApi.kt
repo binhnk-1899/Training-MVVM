@@ -2,6 +2,7 @@ package com.binhnk.retrofitwithroom.data.remote
 
 import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.*
 

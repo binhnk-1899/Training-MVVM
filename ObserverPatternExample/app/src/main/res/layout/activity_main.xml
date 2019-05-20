@@ -8,6 +8,13 @@
     tools:context=".ui.main.MainActivity">
 
     <Button
+        android:id="@+id/btn_observable_example"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Observable Example"
+        android:textAllCaps="false" />
+
+    <Button
         android:id="@+id/btn_rxjava_with_retrofit_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_14sdp"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textColor="@android:color/black"
         android:textSize="@dimen/_13sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,26 +26,12 @@
         android:layout_marginStart="@dimen/_14sdp"
         android:layout_marginEnd="@dimen/_14sdp"
         android:ellipsize="end"
-        android:maxLines="3"
+        android:maxLines="1"
         android:textColor="#3c3c3c"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-    <TextView
-        android:id="@+id/tv_author"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginEnd="@dimen/_14sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
-        android:maxLines="1"
-        android:textColor="#3c3c3c"
-        android:textSize="@dimen/_11sdp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/tv_body"
-        app:layout_constraintStart_toStartOf="@id/tv_body"
-        app:layout_constraintTop_toBottomOf="@id/tv_body" />
 </androidx.constraintlayout.widget.ConstraintLayout>
