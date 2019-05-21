@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.ui.base.BaseActivity
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostStateDialog
-import com.binhnk.retrofitwithroom.ui.screen.storage.dialog.RemoveConfirmDialog
+import com.binhnk.retrofitwithroom.ui.screen.main.dialog.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.toolbar_main.*
 import org.koin.androidx.viewmodel.ext.viewModel
@@ -105,7 +105,8 @@ class MainActivity :
 
             deleteUser.observe(mOwner, Observer {
                 if (mRemoveConfirmDialog == null) {
-                    mRemoveConfirmDialog = RemoveConfirmDialog()
+                    mRemoveConfirmDialog =
+                        RemoveConfirmDialog()
                 }
                 mRemoveConfirmDialog!!.show(supportFragmentManager, "REMOVE_CONFIRM")
             })

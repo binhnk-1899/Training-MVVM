@@ -1,18 +1,15 @@
-package com.binhnk.retrofitwithroom.ui.screen.storage.dialog
+package com.binhnk.retrofitwithroom.ui.screen.main.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.databinding.DialogUserInfoBinding
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
-import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.dialog_user_info.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
-import org.koin.androidx.viewmodel.ext.viewModel
 
 class UserInfoDialog : BaseDialogFragment<DialogUserInfoBinding>() {
     override val layoutId: Int

@@ -1,11 +1,9 @@
-package com.binhnk.retrofitwithroom.ui.screen.storage.dialog
+package com.binhnk.retrofitwithroom.ui.screen.main.dialog
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
-import com.binhnk.retrofitwithroom.ui.screen.storage.StorageActivityViewModel
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.dialog_confirm_remove.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel

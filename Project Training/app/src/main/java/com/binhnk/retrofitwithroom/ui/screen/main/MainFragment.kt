@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.data.model.User
-import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
+import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseFragment
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import com.binhnk.retrofitwithroom.utils.Utils
@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.sharedViewModel
 import kotlin.math.absoluteValue
 
 class MainFragment :
-        BaseFragment<com.binhnk.retrofitwithroom.databinding.FragmentMainBinding, MainViewModel>() {
+    BaseFragment<com.binhnk.retrofitwithroom.databinding.FragmentMainBinding, MainViewModel>() {
     private lateinit var mContext: Context
     private val mOwner: LifecycleOwner by lazy { this@MainFragment }
 
@@ -38,12 +38,12 @@ class MainFragment :
 
         viewModel.apply {
             userDaoAdapter =
-                    UserAdapter(mContext, true, object : UserAdapter.Callback {
-                        override fun onItemClicked(mUserClicked: User) {
-                            addUser(mUserClicked)
-                        }
+                UserAdapter(mContext, userDAO, true, object : UserAdapter.Callback {
+                    override fun onItemClicked(mUserClicked: User) {
+                        addUser(mUserClicked)
+                    }
 
-                    })
+                })
 
             userClientList.observe(mOwner, Observer {
                 userDaoAdapter?.updateAdapter(it)
@@ -65,8 +65,8 @@ class MainFragment :
             addUserToDBSuccess.observe(mOwner, Observer {
                 if (it != -1) {
                     Utils.shortToast(
-                            mContext,
-                            "User has been add to database"
+                        mContext,
+                        "User has been add to database"
                     )
                     userDaoAdapter?.updateCheckingState(it.absoluteValue)
                 }
@@ -74,8 +74,8 @@ class MainFragment :
 
             addUserToDBFailure.observe(mOwner, Observer {
                 Utils.shortToast(
-                        mContext,
-                        "User has been exist in database"
+                    mContext,
+                    "User has been exist in database"
                 )
             })
         }

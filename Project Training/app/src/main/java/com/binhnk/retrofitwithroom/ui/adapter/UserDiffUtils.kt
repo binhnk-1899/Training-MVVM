@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.adapters
+package com.binhnk.retrofitwithroom.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.binhnk.retrofitwithroom.data.model.User

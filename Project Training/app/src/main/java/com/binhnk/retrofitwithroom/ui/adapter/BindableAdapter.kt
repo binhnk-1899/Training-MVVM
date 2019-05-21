@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.adapters
+package com.binhnk.retrofitwithroom.ui.adapter
 
 interface BindableAdapter<T> {
     fun setData(items: List<T>)

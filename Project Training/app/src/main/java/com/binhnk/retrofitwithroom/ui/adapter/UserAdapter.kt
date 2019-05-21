@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.adapters
+package com.binhnk.retrofitwithroom.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAdapter(
     private val mContext: Context,
+    private val userDAO: UserDAO,
     private val showChecking: Boolean,
     private val mCallback: Callback
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
@@ -47,20 +48,20 @@ class UserAdapter(
             .centerCrop()
             .into(holderUser.imAvatar)
 
-//        if (showChecking) {
-//            Thread(Runnable {
-//                val check = userDAO.getUserByUserId(mObj.id) == null
-//                holderUser.imChecked.post {
-//                    holderUser.imChecked.visibility = if (check) {
-//                        View.INVISIBLE
-//                    } else {
-//                        View.VISIBLE
-//                    }
-//                }
-//            }).start()
-//        } else {
-//            holderUser.imChecked.visibility = View.INVISIBLE
-//        }
+        if (showChecking) {
+            Thread(Runnable {
+                val check = userDAO.getUserByUserId(mObj.id) == null
+                holderUser.imChecked.post {
+                    holderUser.imChecked.visibility = if (check) {
+                        View.INVISIBLE
+                    } else {
+                        View.VISIBLE
+                    }
+                }
+            }).start()
+        } else {
+            holderUser.imChecked.visibility = View.INVISIBLE
+        }
 
         holderUser.itemView.setOnClickListener {
             mCallback.onItemClicked(mObj)
@@ -77,20 +78,20 @@ class UserAdapter(
         } else {
             for (s in payloads) {
                 if (s == "update_check") {
-//                    if (showChecking) {
-//                        Thread(Runnable {
-//                            val check = userDAO.getUserByUserId(dataList[position].id) == null
-//                            holder.imChecked.post {
-//                                holder.imChecked.visibility = if (check) {
-//                                    View.INVISIBLE
-//                                } else {
-//                                    View.VISIBLE
-//                                }
-//                            }
-//                        }).start()
-//                    } else {
-//                        holder.imChecked.visibility = View.INVISIBLE
-//                    }
+                    if (showChecking) {
+                        Thread(Runnable {
+                            val check = userDAO.getUserByUserId(dataList[position].id) == null
+                            holder.imChecked.post {
+                                holder.imChecked.visibility = if (check) {
+                                    View.INVISIBLE
+                                } else {
+                                    View.VISIBLE
+                                }
+                            }
+                        }).start()
+                    } else {
+                        holder.imChecked.visibility = View.INVISIBLE
+                    }
                 }
             }
         }

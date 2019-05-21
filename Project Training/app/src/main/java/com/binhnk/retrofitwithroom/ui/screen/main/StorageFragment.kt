@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.data.model.User
-import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
+import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseFragment
-import com.binhnk.retrofitwithroom.ui.screen.storage.dialog.UserInfoDialog
+import com.binhnk.retrofitwithroom.ui.screen.main.dialog.UserInfoDialog
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_storage.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel
@@ -35,10 +35,11 @@ class StorageFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.apply {
-            userRoomAdapter = UserAdapter(mContext, false, object : UserAdapter.Callback {
+            userRoomAdapter = UserAdapter(mContext, userDAO, false, object : UserAdapter.Callback {
                 override fun onItemClicked(mUserClicked: User) {
                     userClicked.postValue(mUserClicked)
-                    val mInfoDialog = UserInfoDialog()
+                    val mInfoDialog =
+                        UserInfoDialog()
                     mInfoDialog.show(childFragmentManager, "info")
                 }
 

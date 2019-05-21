@@ -6,7 +6,7 @@ import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.data.repository.UserRepository
-import com.binhnk.retrofitwithroom.ui.adapters.UserAdapter
+import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
 import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import io.reactivex.Completable
@@ -20,7 +20,7 @@ import retrofit2.Response
 
 
 class MainViewModel(
-    private val userDAO: UserDAO,
+    val userDAO: UserDAO,
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
