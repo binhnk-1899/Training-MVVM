@@ -7,7 +7,7 @@ import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.data.repository.UserRepository
 import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
-import com.binhnk.retrofitwithroom.ui.base.BaseViewModel
+import com.binhnk.retrofitwithroom.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
@@ -99,6 +99,7 @@ class MainViewModel(
 
     val deleteUser = SingleLiveEvent<Unit>()
     val confirmDeleteUser = SingleLiveEvent<Unit>()
+    val userDeleted = SingleLiveEvent<Unit>()
 
     /**
      * user adapter
@@ -199,13 +200,6 @@ class MainViewModel(
     }
 
     /**
-     * delete user
-     */
-    fun onDeleteUser() {
-        deleteUser.call()
-    }
-
-    /**
      * action post
      */
     fun onPostClicked() {
@@ -281,6 +275,9 @@ class MainViewModel(
             ))
     }
 
+    /**
+     * delete user from Room
+     */
     fun deleteUser() {
         if (userClicked.value != null) {
             Completable.fromAction {
@@ -292,6 +289,7 @@ class MainViewModel(
                     override fun onComplete() {
                         userRepositoryList.value!!.remove(userClicked.value)
                         userClicked.postValue(null)
+                        userDeleted.call()
                     }
 
                     override fun onSubscribe(d: Disposable) {

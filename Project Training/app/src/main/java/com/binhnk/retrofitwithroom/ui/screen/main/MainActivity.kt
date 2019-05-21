@@ -8,7 +8,7 @@ import android.transition.TransitionManager
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.binhnk.retrofitwithroom.ui.base.BaseActivity
+import com.binhnk.retrofitwithroom.base.BaseActivity
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostStateDialog
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.RemoveConfirmDialog

@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
-import com.binhnk.retrofitwithroom.ui.base.BaseFragment
+import com.binhnk.retrofitwithroom.base.BaseFragment
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import com.binhnk.retrofitwithroom.utils.Utils
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -77,6 +77,15 @@ class MainFragment :
                     mContext,
                     "User has been exist in database"
                 )
+            })
+
+            userDeleted.observe(mOwner, Observer {
+                val count = userDaoAdapter?.itemCount!!
+                if (count > 0) {
+                    for (i in 0 until count) {
+                        userDaoAdapter?.notifyItemChanged(i, "update_check")
+                    }
+                }
             })
         }
 

@@ -1,13 +1,7 @@
-package com.binhnk.retrofitwithroom.ui.base
+package com.binhnk.retrofitwithroom.base
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.*
-import java.net.HttpURLConnection
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 abstract class BaseViewModel  : ViewModel() {
 

@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.base
+package com.binhnk.retrofitwithroom.base
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView

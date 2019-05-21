@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.databinding.DialogUserInfoBinding
-import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
+import com.binhnk.retrofitwithroom.base.BaseDialogFragment
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.dialog_user_info.*
@@ -21,15 +21,6 @@ class UserInfoDialog : BaseDialogFragment<DialogUserInfoBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding.viewModel = mViewModel
-
-//        mViewModel.onCancelPressed.observe(this, Observer {
-//            dismiss()
-//        })
-//
-//        mViewModel.onDeletePressed.observe(this, Observer {
-//            Log.e("Ahihi", "Delete pressed")
-//            mViewModel.onCancelPressed.call()
-//        })
 
         mViewModel.userClicked.observe(this, Observer {
             if (it != null) {

@@ -1,186 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="viewModel"
-            type="com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel" />
+                name="viewModel"
+                type="com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_dialog"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingEnd="@dimen/_14sdp">
-
-        <TextView
-            android:id="@+id/tv_header"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_32sdp"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="@string/user_information"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog"
+            android:paddingStart="@dimen/_14sdp"
+            android:paddingEnd="@dimen/_14sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/im_avatar"
-            android:layout_width="@dimen/_48sdp"
-            android:layout_height="@dimen/_48sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_header" />
+                android:id="@+id/im_avatar"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/tv_id_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:text="User ID:"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintBottom_toBottomOf="@id/im_avatar"
-            app:layout_constraintStart_toEndOf="@id/im_avatar"
-            app:layout_constraintTop_toTopOf="@id/im_avatar" />
+                android:id="@+id/tv_header"
+                android:layout_width="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_information"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/im_avatar"
+                app:layout_constraintBottom_toTopOf="@id/tv_id_1"
+                app:layout_constraintTop_toTopOf="@id/im_avatar"/>
 
         <TextView
-            android:id="@+id/tv_id_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintBottom_toBottomOf="@id/im_avatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_id_1"
-            app:layout_constraintTop_toTopOf="@id/im_avatar" />
+                android:id="@+id/tv_id_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_14sdp"
+                app:layout_constraintTop_toBottomOf="@id/tv_header"
+                android:text="User ID:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="@id/im_avatar"
+                app:layout_constraintStart_toEndOf="@id/im_avatar"/>
 
         <TextView
-            android:id="@+id/tv_first_name_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="First name:"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_first_name_2"
-            app:layout_constraintStart_toStartOf="@id/im_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/im_avatar" />
+                android:id="@+id/tv_id_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_header"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="@id/im_avatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_id_1"/>
 
         <TextView
-            android:id="@+id/tv_first_name_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_first_name_1"
-            app:layout_constraintTop_toBottomOf="@+id/im_avatar" />
+                android:id="@+id/tv_first_name_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="First name:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_first_name_2"
+                app:layout_constraintStart_toStartOf="@id/im_avatar"
+                app:layout_constraintTop_toBottomOf="@+id/im_avatar"/>
 
         <TextView
-            android:id="@+id/tv_last_name_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:text="Last name:"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_email_1"
-            app:layout_constraintStart_toStartOf="@id/im_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/tv_first_name_1" />
+                android:id="@+id/tv_first_name_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_first_name_1"
+                app:layout_constraintTop_toBottomOf="@+id/im_avatar"/>
 
         <TextView
-            android:id="@+id/tv_last_name_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_email_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_first_name_2"
-            app:layout_constraintTop_toBottomOf="@id/tv_first_name_2" />
+                android:id="@+id/tv_last_name_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:text="Last name:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_email_1"
+                app:layout_constraintStart_toStartOf="@id/im_avatar"
+                app:layout_constraintTop_toBottomOf="@+id/tv_first_name_1"/>
 
         <TextView
-            android:id="@+id/tv_email_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:text="Email:"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintStart_toStartOf="@id/im_avatar"
-            app:layout_constraintTop_toBottomOf="@id/tv_last_name_1" />
+                android:id="@+id/tv_last_name_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_email_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_first_name_2"
+                app:layout_constraintTop_toBottomOf="@id/tv_first_name_2"/>
 
         <TextView
-            android:id="@+id/tv_email_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_first_name_2"
-            app:layout_constraintTop_toBottomOf="@id/tv_last_name_2" />
+                android:id="@+id/tv_email_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:text="Email:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="@id/im_avatar"
+                app:layout_constraintTop_toBottomOf="@id/tv_last_name_1"/>
 
         <TextView
-            android:id="@+id/tv_ok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="@dimen/_14sdp"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_14sdp"
-            android:paddingBottom="@dimen/_6sdp"
-            android:text="@android:string/ok"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_email_2" />
+                android:id="@+id/tv_email_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_first_name_2"
+                app:layout_constraintTop_toBottomOf="@id/tv_last_name_2"/>
 
         <TextView
-            android:id="@+id/tv_delete_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="@dimen/_14sdp"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_14sdp"
-            android:paddingBottom="@dimen/_6sdp"
-            android:text="@string/delete_user"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/_12sdp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_ok" />
+                android:id="@+id/tv_ok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_14sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@android:string/ok"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_email_2"/>
+
+        <TextView
+                android:id="@+id/tv_delete_user"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_14sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/delete_user"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_ok"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

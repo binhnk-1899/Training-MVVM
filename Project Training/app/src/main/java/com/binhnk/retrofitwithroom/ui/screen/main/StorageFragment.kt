@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
-import com.binhnk.retrofitwithroom.ui.base.BaseFragment
+import com.binhnk.retrofitwithroom.base.BaseFragment
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.UserInfoDialog
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_storage.*
@@ -72,6 +72,9 @@ class StorageFragment :
 
         rv_user_storage.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
         rv_user_storage.adapter = viewModel.userRoomAdapter
-        viewModel.queryAllUserUsingRx()
+
+        Thread(Runnable {
+            viewModel.queryAllUserUsingRx()
+        }).start()
     }
 }

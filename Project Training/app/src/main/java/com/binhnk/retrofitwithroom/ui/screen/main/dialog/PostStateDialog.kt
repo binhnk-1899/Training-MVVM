@@ -7,7 +7,7 @@ import com.binhnk.retrofitwithroom.R
 import com.binhnk.retrofitwithroom.data.constants.Constants
 import com.binhnk.retrofitwithroom.data.model.UserCreated
 import com.binhnk.retrofitwithroom.databinding.DialogPostSuccessBinding
-import com.binhnk.retrofitwithroom.ui.base.BaseDialogFragment
+import com.binhnk.retrofitwithroom.base.BaseDialogFragment
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.dialog_post_success.*
 import org.koin.androidx.viewmodel.ext.sharedViewModel

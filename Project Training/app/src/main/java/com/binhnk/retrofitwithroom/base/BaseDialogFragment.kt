@@ -1,4 +1,4 @@
-package com.binhnk.retrofitwithroom.ui.base
+package com.binhnk.retrofitwithroom.base
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
