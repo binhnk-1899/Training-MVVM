@@ -246,8 +246,12 @@ class MainViewModel(
     }
 
     fun collectAllList(l1: UserResponse, l2: UserResponse, l3: UserResponse, l4: UserResponse): ArrayList<User> {
-
-        return ArrayList()
+        val tmp = ArrayList<User>()
+        tmp.addAll(l1.users)
+        tmp.addAll(l2.users)
+        tmp.addAll(l3.users)
+        tmp.addAll(l4.users)
+        return tmp
     }
 
     /**
