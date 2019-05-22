@@ -16,9 +16,7 @@ import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import rx.Subscriber
-import rx.functions.Func4
-import rx.functions.FuncN
+import io.reactivex.functions.Function4
 
 
 class MainViewModel(
@@ -222,28 +220,34 @@ class MainViewModel(
     /**
      * load all users from all pages
      */
+    @SuppressLint("CheckResult")
     fun loadAllUsers() {
         val userObservable1 = userRepository.getUsersUsingRx(1)
-//                .subscribeOn(schedulerProvider.newThread)
-//                .observeOn(schedulerProvider.ui)
+                .subscribeOn(schedulerProvider.newThread)
+                .observeOn(schedulerProvider.ui)
         val userObservable2 = userRepository.getUsersUsingRx(2)
-//                .subscribeOn(schedulerProvider.newThread)
-//                .observeOn(schedulerProvider.ui)
+                .subscribeOn(schedulerProvider.newThread)
+                .observeOn(schedulerProvider.ui)
         val userObservable3 = userRepository.getUsersUsingRx(3)
-//                .subscribeOn(schedulerProvider.newThread)
-//                .observeOn(schedulerProvider.ui)
+                .subscribeOn(schedulerProvider.newThread)
+                .observeOn(schedulerProvider.ui)
         val userObservable4 = userRepository.getUsersUsingRx(4)
-//                .subscribeOn(schedulerProvider.newThread)
-//                .observeOn(schedulerProvider.ui)
+                .subscribeOn(schedulerProvider.newThread)
+                .observeOn(schedulerProvider.ui)
 
         Observable.zip(userObservable1, userObservable2, userObservable3, userObservable4,
-                object : Func4<UserResponse, UserResponse, UserResponse, UserResponse, ArrayList<User>> {
-                    override fun call(t1: UserResponse?, t2: UserResponse?, t3: UserResponse?, t4: UserResponse?): ArrayList<User> {
+                Function4<UserResponse, UserResponse, UserResponse, UserResponse, ArrayList<User>> { t1, t2, t3, t4 ->
+                    collectAllList(t1, t2, t3, t4)
+                }).subscribeOn(schedulerProvider.newThread)
+                .observeOn(schedulerProvider.ui)
+                .subscribe {
+                    userClientList.postValue(it)
+                }
+    }
 
-                    }
+    fun collectAllList(l1: UserResponse, l2: UserResponse, l3: UserResponse, l4: UserResponse): ArrayList<User> {
 
-                })
-
+        return ArrayList()
     }
 
     /**
