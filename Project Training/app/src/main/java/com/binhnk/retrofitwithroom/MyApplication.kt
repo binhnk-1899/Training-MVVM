@@ -1,6 +1,7 @@
 package com.binhnk.retrofitwithroom
 
 import android.app.Application
+import com.binhnk.retrofitwithroom.di.appModule
 import com.binhnk.retrofitwithroom.di.networkModule
 import com.binhnk.retrofitwithroom.di.repositoryModule
 import com.binhnk.retrofitwithroom.di.viewModelModule
@@ -14,7 +15,7 @@ class MyApplication : Application() {
 
         startKoin {
             androidContext(this@MyApplication)
-            modules(networkModule, repositoryModule, viewModelModule)
+            modules(appModule, networkModule, repositoryModule, viewModelModule)
         }
     }
 }

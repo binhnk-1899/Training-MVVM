@@ -1,17 +1,21 @@
-package com.example.moviedb.data.scheduler
+package com.binhnk.retrofitwithroom.data.scheduler
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class AppSchedulerProvider : SchedulerProvider {
 
-    override val uiContext = SupervisorJob() + Dispatchers.Main
+    override val ui: Scheduler
+        get() = AndroidSchedulers.mainThread()
 
-    override val ioContext = SupervisorJob() + Dispatchers.IO
+    override val computation: Scheduler
+        get() = Schedulers.computation()
 
-    override val uiScope = CoroutineScope(uiContext)
+    override val io: Scheduler
+        get() = Schedulers.io()
 
-    override val ioScope = CoroutineScope(ioContext)
+    override val newThread: Scheduler
+        get() = Schedulers.newThread()
 
 }

@@ -22,7 +22,6 @@ val networkModule = module {
     single { createItemApi(get()) }
 }
 
-
 val gson: Gson = GsonBuilder().setLenient().create()
 
 fun createOkHttpCache(context: Context): Cache =

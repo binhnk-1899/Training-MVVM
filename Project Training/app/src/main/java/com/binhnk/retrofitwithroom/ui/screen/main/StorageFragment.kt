@@ -35,7 +35,11 @@ class StorageFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.apply {
-            userRoomAdapter = UserAdapter(mContext, userDAO, false, object : UserAdapter.Callback {
+            userRoomAdapter = UserAdapter(mContext,  false, object : UserAdapter.Callback {
+                override fun onItemLongClicked(mUserClicked: User) {
+
+                }
+
                 override fun onItemClicked(mUserClicked: User) {
                     userClicked.postValue(mUserClicked)
                     val mInfoDialog =
@@ -45,11 +49,11 @@ class StorageFragment :
 
             })
 
-            userRepositoryList.observe(this@StorageFragment, Observer {
+            userRoomList.observe(this@StorageFragment, Observer {
                 if (it.isNullOrEmpty()) {
-                    noDataRepository.postValue(true)
+                    noDataRoom.postValue(true)
                 } else {
-                    noDataRepository.postValue(false)
+                    noDataRoom.postValue(false)
                 }
 
                 if (userRoomAdapter != null) {
@@ -57,16 +61,12 @@ class StorageFragment :
                 }
             })
 
-            noDataRepository.observe(this@StorageFragment, Observer {
+            noDataRoom.observe(this@StorageFragment, Observer {
                 tv_no_data_storage.visibility = if (it) {
                     View.VISIBLE
                 } else {
                     View.GONE
                 }
-            })
-
-            isLoadingRepository.observe(this@StorageFragment, Observer {
-                swipe_refresh_layout_repository.isRefreshing = it
             })
         }
 

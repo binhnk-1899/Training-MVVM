@@ -1,6 +1,5 @@
 package com.binhnk.retrofitwithroom.data.model
 
-import android.widget.ImageView
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.room.ColumnInfo
@@ -8,9 +7,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.Glide
-import androidx.databinding.BindingAdapter
 
 @Entity(tableName = "userClientList")
 class User(
@@ -48,19 +44,8 @@ class User(
     @ColumnInfo(name = "page")
     @SerializedName("page")
     @Expose
-    var page: Int
-) : BaseObservable() {
+    var page: Int,
 
-    @Bindable
-    fun getFullName() : String {
-        return "$firstName $lastName"
-    }
+    var addedInDB: Boolean = false
 
-    @BindingAdapter("imageUrl")
-    fun loadImage(view: ImageView, url: String) {
-        Glide.with(view.context)
-            .load(url)
-            .apply(RequestOptions.circleCropTransform())
-            .into(view)
-    }
-}
+) : BaseObservable()

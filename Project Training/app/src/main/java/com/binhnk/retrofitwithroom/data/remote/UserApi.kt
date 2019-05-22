@@ -9,8 +9,6 @@ import retrofit2.http.*
 
 
 interface UserApi {
-    @GET("api/users")
-    fun getAllUsers(@Query("page") page: String): Call<UserResponse>
 
     @GET("api/users")
     fun getAllUsersUsingRx(@Query("page") page: String): Observable<UserResponse>
@@ -20,5 +18,5 @@ interface UserApi {
     fun postUser(
         @Field("name") title: String,
         @Field("job") body: String
-    ): Call<UserCreated>
+    ): Observable<UserCreated>
 }

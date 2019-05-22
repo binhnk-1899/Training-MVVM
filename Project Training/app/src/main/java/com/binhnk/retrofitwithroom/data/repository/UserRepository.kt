@@ -6,8 +6,7 @@ import io.reactivex.Observable
 import retrofit2.Call
 
 interface UserRepository {
-    fun getUsers(page: Int? = 0): Call<UserResponse>
     fun getUsersUsingRx(page: Int? = 0): Observable<UserResponse>
     fun postUser(title: String,
-                 body: String): Call<UserCreated>
+                 body: String): Observable<UserCreated>
 }

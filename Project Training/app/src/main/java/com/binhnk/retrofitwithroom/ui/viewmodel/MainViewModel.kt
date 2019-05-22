@@ -1,64 +1,59 @@
 package com.binhnk.retrofitwithroom.ui.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.binhnk.retrofitwithroom.base.BaseViewModel
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
+import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
 import com.binhnk.retrofitwithroom.data.repository.UserRepository
+import com.binhnk.retrofitwithroom.data.scheduler.SchedulerProvider
 import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
-import com.binhnk.retrofitwithroom.base.BaseViewModel
 import com.binhnk.retrofitwithroom.utils.SingleLiveEvent
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import rx.Subscriber
+import rx.functions.Func4
+import rx.functions.FuncN
 
 
 class MainViewModel(
-    val userDAO: UserDAO,
-    private val userRepository: UserRepository
+        val userDAO: UserDAO,
+        private val userRepository: UserRepository,
+        private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel() {
 
-    var currentPage: Int = -1
-    val isRefreshLoading = MutableLiveData<Boolean>().apply {
-        postValue(false)
+    val currentPage = MutableLiveData<Int>().apply {
+        postValue(1)
     }
-    val isLoadingRepository = MutableLiveData<Boolean>().apply {
+    val isRefreshLoading = MutableLiveData<Boolean>().apply {
         postValue(false)
     }
     val goToStorage = SingleLiveEvent<Unit>()
 
-    val postNewUserClicked = MutableLiveData<Boolean>()
-        .apply {
-            postValue(false)
-        }
+    val postNewUserClicked = MutableLiveData<Boolean>().apply {
+        postValue(false)
+    }
 
     val userClientList = MutableLiveData<ArrayList<User>>().apply {
         postValue(ArrayList())
     }
 
-    val userRepositoryList = MutableLiveData<ArrayList<User>>().apply {
+    val userRoomList = MutableLiveData<ArrayList<User>>().apply {
         postValue(ArrayList())
     }
 
-    val noDataVisible = MutableLiveData<Boolean>()
-        .apply {
-            postValue(
-                userClientList.value.isNullOrEmpty()
-            )
-        }
+    val noDataClient = MutableLiveData<Boolean>().apply {
+        postValue(true)
+    }
 
-    val noDataRepository = MutableLiveData<Boolean>()
-        .apply {
-            postValue(
-                userRepositoryList.value.isNullOrEmpty()
-            )
-        }
+    val noDataRoom = MutableLiveData<Boolean>().apply {
+        postValue(true)
+    }
 
     private val jobPost = MutableLiveData<String>().apply {
         postValue("")
@@ -66,7 +61,7 @@ class MainViewModel(
 
     val postClicked = SingleLiveEvent<Unit>()
 
-    var userPost = MutableLiveData<String>().apply {
+    private var userPost = MutableLiveData<String>().apply {
         postValue("")
     }
 
@@ -80,9 +75,8 @@ class MainViewModel(
 
     val postUserUnSuccess = SingleLiveEvent<Unit>()
 
-    val addUserToDBSuccess = MutableLiveData<Int>().apply {
-        postValue(-1)
-    }
+    val addUserToDBSuccess = SingleLiveEvent<Unit>()
+
     val addUserToDBFailure = SingleLiveEvent<Unit>()
 
     /**
@@ -104,26 +98,21 @@ class MainViewModel(
     /**
      * user adapter
      */
-    var userDaoAdapter: UserAdapter? = null
+    var userClientAdapter: UserAdapter? = null
     var userRoomAdapter: UserAdapter? = null
-
-    /**
-     * currentPage live data
-     */
-    fun setValueForCurrentPage(s: CharSequence) {
-        currentPage = if (s.toString() != "") {
-            s.toString().toInt()
-        } else {
-            -1
-        }
-    }
 
     /**
      * isLoading live data
      */
-    fun callRefreshLoading() {
+    fun callRefreshLoading(page: Int) {
+        if (page != currentPage.value) {
+            currentPage.postValue(page)
+        }
+    }
+
+    fun callRefreshCurrentPage() {
         isRefreshLoading.postValue(true)
-        loadUserUsingRx()
+        loadUserApi()
     }
 
     /**
@@ -138,37 +127,6 @@ class MainViewModel(
      */
     fun setPostNewUserClicked(b: Boolean) {
         postNewUserClicked.postValue(b)
-    }
-
-    /**
-     * load user using RxJava and Retrofit
-     */
-    private fun loadUserUsingRx() {
-        if (currentPage >= 0) {
-            compositeDisposable.add(
-                userRepository.getUsersUsingRx(currentPage)
-                    .subscribeOn(Schedulers.io())
-                    .map { userResponses -> userResponses }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        { userResponses ->
-                            run {
-                                userClientList.postValue(userResponses.users)
-                                isRefreshLoading.postValue(false)
-                            }
-                        },
-                        {
-                            run {
-                                userClientList.postValue(ArrayList())
-                                isRefreshLoading.postValue(false)
-                            }
-                        }
-                    )
-            )
-        } else {
-            userClientList.postValue(ArrayList())
-            isRefreshLoading.postValue(false)
-        }
     }
 
     /**
@@ -202,77 +160,152 @@ class MainViewModel(
     /**
      * action post
      */
-    fun onPostClicked() {
+    fun postUser() {
         postClicked.call()
-        userRepository.postUser(userPost.value!!, jobPost.value!!)
-            .enqueue(object : Callback<UserCreated> {
-                override fun onFailure(call: Call<UserCreated>, t: Throwable) {
-                    postUserFailure.call()
-                }
-
-                override fun onResponse(
-                    call: Call<UserCreated>,
-                    response: Response<UserCreated>
-                ) {
-                    if (response.isSuccessful
-                        && response.body() != null
-                    ) {
-                        userCreated.postValue(response.body())
-                        postUserSuccess.call()
-                    } else {
-                        postUserUnSuccess.call()
-                    }
-                }
-
-            })
+        compositeDisposable.add(
+                userRepository.postUser(userPost.value!!, jobPost.value!!)
+                        .subscribeOn(schedulerProvider.io)
+                        .observeOn(schedulerProvider.ui)
+                        .subscribe(
+                                { success ->
+                                    run {
+                                        userCreated.postValue(success)
+                                        postUserSuccess.call()
+                                    }
+                                },
+                                { postUserUnSuccess.call() }
+                        )
+        )
     }
 
     /**
-     * add user to Room database
+     * load user using RxJava and Retrofit
      */
-    fun addUser(user: User) {
+    fun loadUserApi() {
+        when {
+            currentPage.value!! > 0 -> compositeDisposable.add(
+                    userRepository.getUsersUsingRx(currentPage.value)
+                            .map { response ->
+                                run {
+                                    for (user in response.users) {
+                                        user.addedInDB = userDAO.getUserByUserId(user.id) != null
+                                    }
+                                    response.users
+                                }
+                            }
+                            .subscribeOn(schedulerProvider.io)
+                            .observeOn(schedulerProvider.ui)
+                            .subscribe(
+                                    { userResponses ->
+                                        run {
+                                            userClientList.value = userResponses
+                                            updateStateOfUsers()
+                                            isRefreshLoading.postValue(false)
+                                        }
+                                    },
+                                    {
+                                        run {
+                                            userClientList.value = ArrayList()
+                                            isRefreshLoading.postValue(false)
+                                        }
+                                    }
+                            )
+            )
+            currentPage.value!! == 0 -> loadAllUsers()
+            else -> {
+                userClientList.postValue(ArrayList())
+                isRefreshLoading.postValue(false)
+            }
+        }
+    }
+
+    /**
+     * load all users from all pages
+     */
+    fun loadAllUsers() {
+        val userObservable1 = userRepository.getUsersUsingRx(1)
+//                .subscribeOn(schedulerProvider.newThread)
+//                .observeOn(schedulerProvider.ui)
+        val userObservable2 = userRepository.getUsersUsingRx(2)
+//                .subscribeOn(schedulerProvider.newThread)
+//                .observeOn(schedulerProvider.ui)
+        val userObservable3 = userRepository.getUsersUsingRx(3)
+//                .subscribeOn(schedulerProvider.newThread)
+//                .observeOn(schedulerProvider.ui)
+        val userObservable4 = userRepository.getUsersUsingRx(4)
+//                .subscribeOn(schedulerProvider.newThread)
+//                .observeOn(schedulerProvider.ui)
+
+        Observable.zip(userObservable1, userObservable2, userObservable3, userObservable4,
+                object : Func4<UserResponse, UserResponse, UserResponse, UserResponse, ArrayList<User>> {
+                    override fun call(t1: UserResponse?, t2: UserResponse?, t3: UserResponse?, t4: UserResponse?): ArrayList<User> {
+
+                    }
+
+                })
+
+    }
+
+    /**
+     * insert user to Room database
+     */
+    fun insertUserToRoomDB(user: User) {
         Completable.fromAction {
             userDAO.insertUserByRx(user)
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onSubscribe(d: Disposable) {}
+        }.observeOn(schedulerProvider.ui)
+                .subscribeOn(schedulerProvider.io)
+                .subscribe(object : CompletableObserver {
+                    override fun onSubscribe(d: Disposable) {}
 
-                override fun onComplete() {
-                    addUserToDBSuccess.postValue(user.id)
-                }
+                    override fun onComplete() {
+                        addUserToDBSuccess.call()
+                        updateStateOfUsers()
+                    }
 
-                override fun onError(e: Throwable) {
-                    addUserToDBFailure.call()
-                }
-            })
+                    override fun onError(e: Throwable) {
+                        addUserToDBFailure.call()
+                    }
+                })
     }
 
     /**
      * query all user in Room using RxJava
      */
     fun queryAllUserUsingRx() {
-        isLoadingRepository.postValue(true)
-        compositeDisposable.add(userDAO.getALlUser()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { response ->
-                    run {
-                        Log.e("Ahihi", "${response.size}")
-                        userRepositoryList.postValue(ArrayList(response))
-                        isLoadingRepository.postValue(false)
-                    }
-                },
-                {
-                    run {
-                        it.printStackTrace()
-                        Log.e("Ahihi", "Error: 0")
-                        userRepositoryList.postValue(ArrayList())
-                        isLoadingRepository.postValue(false)
-                    }
-                }
-            ))
+        compositeDisposable.add(
+                userDAO.getALlUser().subscribeOn(schedulerProvider.io)
+                        .observeOn(schedulerProvider.ui)
+                        .subscribe(
+                                { response ->
+                                    run {
+                                        Log.e("Ahihi", "${response.size}")
+                                        userRoomList.postValue(ArrayList(response))
+                                    }
+                                },
+                                {
+                                    run {
+                                        it.printStackTrace()
+                                        userRoomList.postValue(ArrayList())
+                                    }
+                                }
+                        ))
+    }
+
+    /**
+     * update state of all user
+     */
+    @SuppressLint("CheckResult")
+    fun updateStateOfUsers() {
+        if (userClientList.value.isNullOrEmpty()) {
+            Log.e("Ahihi", "Update empty")
+            return
+        } else {
+            Log.e("Ahihi", "Update not empty")
+            for (i in 0 until userClientList.value!!.size) {
+                userClientList.value!![i].addedInDB = userDAO.getUserByUserId(userClientList.value!![i].id) != null
+                userClientAdapter?.notifyItemChanged(i, "update_check")
+            }
+        }
     }
 
     /**
@@ -283,24 +316,24 @@ class MainViewModel(
             Completable.fromAction {
                 userDAO.deleteUser(userClicked.value!!)
             }
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CompletableObserver {
-                    override fun onComplete() {
-                        userRepositoryList.value!!.remove(userClicked.value)
-                        userClicked.postValue(null)
-                        userDeleted.call()
-                    }
+                    .subscribeOn(schedulerProvider.io)
+                    .observeOn(schedulerProvider.ui)
+                    .subscribe(object : CompletableObserver {
+                        override fun onComplete() {
+                            userRoomList.value!!.remove(userClicked.value)
+                            userClicked.postValue(null)
+                            userDeleted.call()
+                        }
 
-                    override fun onSubscribe(d: Disposable) {
+                        override fun onSubscribe(d: Disposable) {
 
-                    }
+                        }
 
-                    override fun onError(e: Throwable) {
-                        userClicked.postValue(null)
-                    }
+                        override fun onError(e: Throwable) {
+                            userClicked.postValue(null)
+                        }
 
-                })
+                    })
         }
     }
 }

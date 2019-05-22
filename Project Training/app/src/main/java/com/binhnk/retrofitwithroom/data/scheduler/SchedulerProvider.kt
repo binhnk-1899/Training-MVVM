@@ -1,16 +1,15 @@
-package com.example.moviedb.data.scheduler
+package com.binhnk.retrofitwithroom.data.scheduler
 
-import kotlinx.coroutines.CoroutineScope
-import kotlin.coroutines.CoroutineContext
+import io.reactivex.Scheduler
 
 interface SchedulerProvider {
 
-    val uiContext: CoroutineContext
+    val ui: Scheduler
 
-    val ioContext: CoroutineContext
+    val computation: Scheduler
 
-    val uiScope: CoroutineScope
+    val io: Scheduler
 
-    val ioScope: CoroutineScope
+    val newThread: Scheduler
 
 }

@@ -1,35 +1,35 @@
 package com.binhnk.retrofitwithroom.ui.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.binhnk.retrofitwithroom.R
-import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAdapter(
-    private val mContext: Context,
-    private val userDAO: UserDAO,
-    private val showChecking: Boolean,
-    private val mCallback: Callback
+        private val mContext: Context,
+        private val showChecking: Boolean,
+        private val mCallback: Callback
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     private val dataList: ArrayList<User> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         return UserViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_user,
-                parent,
-                false
-            )
+                LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_user,
+                        parent,
+                        false
+                )
         )
     }
 
@@ -43,64 +43,59 @@ class UserAdapter(
         holderUser.tvUserName.text = String.format("%s %s", mObj.firstName, mObj.lastName)
         holderUser.tvEmail.text = mObj.email
         Glide.with(mContext)
-            .load(mObj.avatar)
-            .placeholder(R.drawable.bg_place_holder)
-            .centerCrop()
-            .into(holderUser.imAvatar)
+                .load(mObj.avatar)
+                .placeholder(R.drawable.bg_place_holder)
+                .centerCrop()
+                .into(holderUser.imAvatar)
 
         if (showChecking) {
-            Thread(Runnable {
-                val check = userDAO.getUserByUserId(mObj.id) == null
-                holderUser.imChecked.post {
-                    holderUser.imChecked.visibility = if (check) {
-                        View.INVISIBLE
-                    } else {
-                        View.VISIBLE
-                    }
-                }
-            }).start()
+            if (mObj.addedInDB) {
+                holderUser.tvUserName.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                holderUser.imChecked.visibility = View.VISIBLE
+            } else {
+                holderUser.tvUserName.setTextColor(Color.BLACK)
+                holderUser.imChecked.visibility = View.INVISIBLE
+            }
         } else {
+            holderUser.tvUserName.setTextColor(Color.BLACK)
             holderUser.imChecked.visibility = View.INVISIBLE
         }
 
         holderUser.itemView.setOnClickListener {
             mCallback.onItemClicked(mObj)
         }
+
+        holderUser.itemView.setOnLongClickListener {
+            mCallback.onItemLongClicked(mObj)
+            true
+        }
     }
 
     override fun onBindViewHolder(
-        holder: UserViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
+            holder: UserViewHolder,
+            position: Int,
+            payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
             for (s in payloads) {
                 if (s == "update_check") {
+                    val mObj = dataList[position]
                     if (showChecking) {
-                        Thread(Runnable {
-                            val check = userDAO.getUserByUserId(dataList[position].id) == null
-                            holder.imChecked.post {
-                                holder.imChecked.visibility = if (check) {
-                                    View.INVISIBLE
-                                } else {
-                                    View.VISIBLE
-                                }
-                            }
-                        }).start()
+                        if (mObj.addedInDB) {
+                            holder.tvUserName.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                            holder.imChecked.visibility = View.VISIBLE
+                        } else {
+                            holder.tvUserName.setTextColor(Color.BLACK)
+                            holder.imChecked.visibility = View.INVISIBLE
+                        }
                     } else {
+                        holder.tvUserName.setTextColor(Color.BLACK)
                         holder.imChecked.visibility = View.INVISIBLE
                     }
                 }
             }
-        }
-    }
-
-    fun updateCheckingState(userID: Int) {
-        val pos = getItemPosition(userID)
-        if (pos != -1) {
-            notifyItemChanged(pos, "update_check")
         }
     }
 
@@ -140,5 +135,6 @@ class UserAdapter(
 
     interface Callback {
         fun onItemClicked(mUserClicked: User)
+        fun onItemLongClicked(mUserClicked: User)
     }
 }

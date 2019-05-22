@@ -3,9 +3,10 @@ package com.binhnk.retrofitwithroom.ui.adapter
 import androidx.recyclerview.widget.DiffUtil
 import com.binhnk.retrofitwithroom.data.model.User
 
+
 class UserDiffUtils(
-    private val oldLst: ArrayList<User>,
-    private val newLst: ArrayList<User>
+        private val oldLst: ArrayList<User>,
+        private val newLst: ArrayList<User>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -21,6 +22,6 @@ class UserDiffUtils(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldLst[oldItemPosition].id == newLst[newItemPosition].id
+        return oldLst[oldItemPosition] == newLst[newItemPosition]
     }
 }

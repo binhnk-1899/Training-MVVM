@@ -13,11 +13,7 @@ class UserRepositoryImpl(
         return userApi.getAllUsersUsingRx(page.toString())
     }
 
-    override fun getUsers(page: Int?): Call<UserResponse> {
-        return userApi.getAllUsers(page.toString())
-    }
-
-    override fun postUser(title: String, body: String): Call<UserCreated> {
+    override fun postUser(title: String, body: String): Observable<UserCreated> {
         return userApi.postUser(title, body)
     }
 }
