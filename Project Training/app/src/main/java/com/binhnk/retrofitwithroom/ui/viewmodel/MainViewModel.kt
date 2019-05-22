@@ -242,10 +242,11 @@ class MainViewModel(
                 .observeOn(schedulerProvider.ui)
                 .subscribe {
                     userClientList.postValue(it)
+                    isRefreshLoading.postValue(false)
                 }
     }
 
-    fun collectAllList(l1: UserResponse, l2: UserResponse, l3: UserResponse, l4: UserResponse): ArrayList<User> {
+    private fun collectAllList(l1: UserResponse, l2: UserResponse, l3: UserResponse, l4: UserResponse): ArrayList<User> {
         val tmp = ArrayList<User>()
         tmp.addAll(l1.users)
         tmp.addAll(l2.users)
