@@ -7,7 +7,6 @@ import com.binhnk.retrofitwithroom.base.BaseViewModel
 import com.binhnk.retrofitwithroom.data.dao.UserDAO
 import com.binhnk.retrofitwithroom.data.model.User
 import com.binhnk.retrofitwithroom.data.model.UserCreated
-import com.binhnk.retrofitwithroom.data.remote.response.UserResponse
 import com.binhnk.retrofitwithroom.data.repository.UserRepository
 import com.binhnk.retrofitwithroom.data.scheduler.SchedulerProvider
 import com.binhnk.retrofitwithroom.ui.adapter.UserAdapter
@@ -20,9 +19,9 @@ import io.reactivex.functions.Function4
 
 
 class MainViewModel(
-        val userDAO: UserDAO,
-        private val userRepository: UserRepository,
-        private val schedulerProvider: SchedulerProvider
+    val userDAO: UserDAO,
+    private val userRepository: UserRepository,
+    private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel() {
 
     val currentPage = MutableLiveData<Int>().apply {
@@ -161,18 +160,18 @@ class MainViewModel(
     fun postUser() {
         postClicked.call()
         compositeDisposable.add(
-                userRepository.postUser(userPost.value!!, jobPost.value!!)
-                        .subscribeOn(schedulerProvider.io)
-                        .observeOn(schedulerProvider.ui)
-                        .subscribe(
-                                { success ->
-                                    run {
-                                        userCreated.postValue(success)
-                                        postUserSuccess.call()
-                                    }
-                                },
-                                { postUserUnSuccess.call() }
-                        )
+            userRepository.postUser(userPost.value!!, jobPost.value!!)
+                .subscribeOn(schedulerProvider.io)
+                .observeOn(schedulerProvider.ui)
+                .subscribe(
+                    { success ->
+                        run {
+                            userCreated.postValue(success)
+                            postUserSuccess.call()
+                        }
+                    },
+                    { postUserUnSuccess.call() }
+                )
         )
     }
 
@@ -182,32 +181,32 @@ class MainViewModel(
     fun loadUserApi() {
         when {
             currentPage.value!! > 0 -> compositeDisposable.add(
-                    userRepository.getUsersUsingRx(currentPage.value)
-                            .map { response ->
-                                run {
-                                    for (user in response.users) {
-                                        user.addedInDB = userDAO.getUserByUserId(user.id) != null
-                                    }
-                                    response.users
-                                }
+                userRepository.getUsersUsingRx(currentPage.value)
+                    .map { response ->
+                        run {
+                            for (user in response.users) {
+                                user.addedInDB = userDAO.getUserByUserId(user.id) != null
                             }
-                            .subscribeOn(schedulerProvider.io)
-                            .observeOn(schedulerProvider.ui)
-                            .subscribe(
-                                    { userResponses ->
-                                        run {
-                                            userClientList.value = userResponses
-                                            updateStateOfUsers()
-                                            isRefreshLoading.postValue(false)
-                                        }
-                                    },
-                                    {
-                                        run {
-                                            userClientList.value = ArrayList()
-                                            isRefreshLoading.postValue(false)
-                                        }
-                                    }
-                            )
+                            response.users
+                        }
+                    }
+                    .subscribeOn(schedulerProvider.io)
+                    .observeOn(schedulerProvider.ui)
+                    .subscribe(
+                        { userResponses ->
+                            run {
+                                userClientList.value = userResponses
+                                updateStateOfUsers()
+                                isRefreshLoading.postValue(false)
+                            }
+                        },
+                        {
+                            run {
+                                userClientList.value = ArrayList()
+                                isRefreshLoading.postValue(false)
+                            }
+                        }
+                    )
             )
             currentPage.value!! == 0 -> loadAllUsers()
             else -> {
@@ -222,36 +221,54 @@ class MainViewModel(
      */
     @SuppressLint("CheckResult")
     fun loadAllUsers() {
-        val userObservable1 = userRepository.getUsersUsingRx(1)
-                .subscribeOn(schedulerProvider.newThread)
-                .observeOn(schedulerProvider.ui)
-        val userObservable2 = userRepository.getUsersUsingRx(2)
-                .subscribeOn(schedulerProvider.newThread)
-                .observeOn(schedulerProvider.ui)
-        val userObservable3 = userRepository.getUsersUsingRx(3)
-                .subscribeOn(schedulerProvider.newThread)
-                .observeOn(schedulerProvider.ui)
-        val userObservable4 = userRepository.getUsersUsingRx(4)
-                .subscribeOn(schedulerProvider.newThread)
-                .observeOn(schedulerProvider.ui)
+        val userObservable1 = getUserObservable(1)
+        val userObservable2 = getUserObservable(2)
+        val userObservable3 = getUserObservable(3)
+        val userObservable4 = getUserObservable(4)
 
+        // zip to collect observables
         Observable.zip(userObservable1, userObservable2, userObservable3, userObservable4,
-                Function4<UserResponse, UserResponse, UserResponse, UserResponse, ArrayList<User>> { t1, t2, t3, t4 ->
-                    collectAllList(t1, t2, t3, t4)
-                }).subscribeOn(schedulerProvider.newThread)
-                .observeOn(schedulerProvider.ui)
-                .subscribe {
-                    userClientList.postValue(it)
-                    isRefreshLoading.postValue(false)
-                }
+            Function4<ArrayList<User>, ArrayList<User>, ArrayList<User>, ArrayList<User>, ArrayList<User>> { t1, t2, t3, t4 ->
+                collectAllList(t1, t2, t3, t4)
+            }).subscribeOn(schedulerProvider.newThread)
+            .observeOn(schedulerProvider.ui)
+            .subscribe {
+                userClientList.postValue(it)
+                isRefreshLoading.postValue(false)
+            }
     }
 
-    private fun collectAllList(l1: UserResponse, l2: UserResponse, l3: UserResponse, l4: UserResponse): ArrayList<User> {
+    /**
+     * get user observable by page
+     */
+    private fun getUserObservable(page: Int): Observable<ArrayList<User>> {
+        return userRepository.getUsersUsingRx(page)
+            .map { response ->
+                run {
+                    for (user in response.users) {
+                        user.addedInDB = userDAO.getUserByUserId(user.id) != null
+                    }
+                    response.users
+                }
+            }
+            .subscribeOn(schedulerProvider.newThread)
+            .observeOn(schedulerProvider.ui)
+    }
+
+    /**
+     * collect all list
+     */
+    private fun collectAllList(
+        l1: ArrayList<User>,
+        l2: ArrayList<User>,
+        l3: ArrayList<User>,
+        l4: ArrayList<User>
+    ): ArrayList<User> {
         val tmp = ArrayList<User>()
-        tmp.addAll(l1.users)
-        tmp.addAll(l2.users)
-        tmp.addAll(l3.users)
-        tmp.addAll(l4.users)
+        tmp.addAll(l1)
+        tmp.addAll(l2)
+        tmp.addAll(l3)
+        tmp.addAll(l4)
         return tmp
     }
 
@@ -262,19 +279,19 @@ class MainViewModel(
         Completable.fromAction {
             userDAO.insertUserByRx(user)
         }.observeOn(schedulerProvider.ui)
-                .subscribeOn(schedulerProvider.io)
-                .subscribe(object : CompletableObserver {
-                    override fun onSubscribe(d: Disposable) {}
+            .subscribeOn(schedulerProvider.io)
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
 
-                    override fun onComplete() {
-                        addUserToDBSuccess.call()
-                        updateStateOfUsers()
-                    }
+                override fun onComplete() {
+                    addUserToDBSuccess.call()
+                    updateStateOfUsers()
+                }
 
-                    override fun onError(e: Throwable) {
-                        addUserToDBFailure.call()
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    addUserToDBFailure.call()
+                }
+            })
     }
 
     /**
@@ -282,22 +299,22 @@ class MainViewModel(
      */
     fun queryAllUserUsingRx() {
         compositeDisposable.add(
-                userDAO.getALlUser().subscribeOn(schedulerProvider.io)
-                        .observeOn(schedulerProvider.ui)
-                        .subscribe(
-                                { response ->
-                                    run {
-                                        Log.e("Ahihi", "${response.size}")
-                                        userRoomList.postValue(ArrayList(response))
-                                    }
-                                },
-                                {
-                                    run {
-                                        it.printStackTrace()
-                                        userRoomList.postValue(ArrayList())
-                                    }
-                                }
-                        ))
+            userDAO.getALlUser().subscribeOn(schedulerProvider.io)
+                .observeOn(schedulerProvider.ui)
+                .subscribe(
+                    { response ->
+                        run {
+                            Log.e("Ahihi", "${response.size}")
+                            userRoomList.postValue(ArrayList(response))
+                        }
+                    },
+                    {
+                        run {
+                            it.printStackTrace()
+                            userRoomList.postValue(ArrayList())
+                        }
+                    }
+                ))
     }
 
     /**
@@ -311,7 +328,8 @@ class MainViewModel(
         } else {
             Log.e("Ahihi", "Update not empty")
             for (i in 0 until userClientList.value!!.size) {
-                userClientList.value!![i].addedInDB = userDAO.getUserByUserId(userClientList.value!![i].id) != null
+                userClientList.value!![i].addedInDB =
+                    userDAO.getUserByUserId(userClientList.value!![i].id) != null
                 userClientAdapter?.notifyItemChanged(i, "update_check")
             }
         }
@@ -325,24 +343,24 @@ class MainViewModel(
             Completable.fromAction {
                 userDAO.deleteUser(userClicked.value!!)
             }
-                    .subscribeOn(schedulerProvider.io)
-                    .observeOn(schedulerProvider.ui)
-                    .subscribe(object : CompletableObserver {
-                        override fun onComplete() {
-                            userRoomList.value!!.remove(userClicked.value)
-                            userClicked.postValue(null)
-                            userDeleted.call()
-                        }
+                .subscribeOn(schedulerProvider.io)
+                .observeOn(schedulerProvider.ui)
+                .subscribe(object : CompletableObserver {
+                    override fun onComplete() {
+                        userRoomList.value!!.remove(userClicked.value)
+                        userClicked.postValue(null)
+                        userDeleted.call()
+                    }
 
-                        override fun onSubscribe(d: Disposable) {
+                    override fun onSubscribe(d: Disposable) {
 
-                        }
+                    }
 
-                        override fun onError(e: Throwable) {
-                            userClicked.postValue(null)
-                        }
+                    override fun onError(e: Throwable) {
+                        userClicked.postValue(null)
+                    }
 
-                    })
+                })
         }
     }
 }

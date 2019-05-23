@@ -1,40 +1,33 @@
 package com.binhnk.rxjavaexample.ui.rxjava
 
+import android.content.Context
 import android.os.Bundle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.os.Handler
+import android.transition.AutoTransition
+import android.transition.TransitionManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import com.binhnk.rxjavaexample.R
-import com.binhnk.rxjavaexample.base.BaseActivity
-import com.binhnk.rxjavaexample.databinding.ActivityPostBinding
 import kotlinx.android.synthetic.main.activity_post.*
-import org.koin.android.ext.android.inject
+import kotlinx.android.synthetic.main.toolbar.*
 
-class PostActivity : BaseActivity<ActivityPostBinding, PostViewModel>() {
+class PostActivity : AppCompatActivity() {
+    private val mContext: Context by lazy { this@PostActivity }
 
-    override val viewModel: PostViewModel by inject()
-    override val layoutId: Int
-        get() = R.layout.activity_post
-
-    private val mAdapter: PostAdapter by lazy {
-        PostAdapter()
+    private val toolbarConstraint1 = ConstraintSet()
+    private val toolbarConstraint2 = ConstraintSet()
+    private val autoTransition: AutoTransition by lazy {
+        AutoTransition()
+    }.apply {
+        this.value.duration = 3500
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_post)
 
-        initRv()
+        toolbarConstraint1.clone(mContext, R.layout.toolbar)
+        toolbarConstraint2.clone(mContext, R.layout.toolbar_alt)
 
-        viewModel.run {
-            loading.observe(this@PostActivity, Observer {
-                swipe_refresh.isRefreshing = it
-            })
-        }
-    }
-
-    private fun initRv() {
-        rv_posts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rv_posts.adapter = mAdapter
     }
 }
