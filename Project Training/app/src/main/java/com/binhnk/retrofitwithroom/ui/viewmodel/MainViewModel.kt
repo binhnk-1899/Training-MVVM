@@ -19,7 +19,7 @@ import io.reactivex.functions.Function4
 
 
 class MainViewModel(
-    val userDAO: UserDAO,
+    private val userDAO: UserDAO,
     private val userRepository: UserRepository,
     private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel() {
