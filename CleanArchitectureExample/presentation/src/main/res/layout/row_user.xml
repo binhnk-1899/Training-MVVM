@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_64sdp"
+        android:id="@+id/root"
         android:background="?selectableItemBackground">
 
         <de.hdodenhof.circleimageview.CircleImageView
