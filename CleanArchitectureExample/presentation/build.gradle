@@ -53,8 +53,8 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
 
     // JSON Parsing
-    implementation 'com.google.code.mGson:mGson:2.8.5'
-    implementation 'com.squareup.retrofit2:converter-mGson:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 

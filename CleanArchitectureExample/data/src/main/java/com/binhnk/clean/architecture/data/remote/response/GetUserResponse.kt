@@ -14,5 +14,5 @@ data class GetUserResponse(
         @SerializedName("total_pages")
         @Expose var totalPages: Int,
         @SerializedName("data")
-        @Expose var users: ArrayList<UserEntity>
+        @Expose var users: List<UserEntity>
 )
