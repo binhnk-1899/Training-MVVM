@@ -1,14 +1,14 @@
-//package com.binhnk.clean.architecture.ui.main
-//
-//import android.view.LayoutInflater
-//import android.view.ViewGroup
-//import androidx.databinding.DataBindingUtil
-//import androidx.databinding.ViewDataBinding
-//import androidx.recyclerview.widget.DiffUtil
-//import com.binhnk.clean.architecture.R
-//import com.binhnk.clean.architecture.base.BaseRecyclerAdapter
-//import com.binhnk.clean.architecture.model.UserItem
-//
+package com.binhnk.clean.architecture.ui.main
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import com.binhnk.clean.architecture.R
+import com.binhnk.clean.architecture.base.BaseRecyclerAdapter
+import com.binhnk.clean.architecture.model.UserItem
+
 //class UserAdapter(
 //    private val dataBindingComponent: DataBindingComponent,
 //    private val callback: ((UserItem) -> Unit)?
