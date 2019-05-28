@@ -5,4 +5,6 @@ import io.reactivex.Single
 
 interface UserRepository : Repository {
     fun getUsersUsingRx(page: Int? = 0): Single<List<User>>
+
+    fun insertUserToDB(user: User): Single<Long>
 }

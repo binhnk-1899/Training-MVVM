@@ -34,19 +34,19 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
 
     implementation project(':domain')
 
-    implementation 'androidx.core:core:1.0.2'
+    implementation 'androidx.core:core:1.2.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.5.0'
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
 
@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha01'
 
     // Room
     implementation 'android.arch.persistence.room:runtime:1.1.1'
@@ -74,13 +74,13 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.1.4'
 
     // koin
-    implementation("org.koin:koin-core:2.0.0-beta-1")
-    implementation("org.koin:koin-android:2.0.0-beta-1")
-    implementation("org.koin:koin-androidx-viewmodel:2.0.0-beta-1")
+    implementation "org.koin:koin-core:2.0.0-beta-1"
+    implementation "org.koin:koin-android:2.0.0-beta-1"
+    implementation "org.koin:koin-androidx-viewmodel:2.0.0-beta-1"
 
     // coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1"
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"
