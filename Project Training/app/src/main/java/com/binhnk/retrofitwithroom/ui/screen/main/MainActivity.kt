@@ -13,8 +13,9 @@ import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostNewUserDialog
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.PostStateDialog
 import com.binhnk.retrofitwithroom.ui.screen.main.dialog.RemoveConfirmDialog
 import com.binhnk.retrofitwithroom.ui.viewmodel.MainViewModel
+import com.binhnk.retrofitwithroom.utils.Utils
 import kotlinx.android.synthetic.main.toolbar_main.*
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.android.ext.android.inject
 
 
 class MainActivity :
@@ -23,7 +24,7 @@ class MainActivity :
     private lateinit var mContext: Context
     private lateinit var mOwner: LifecycleOwner
 
-    override val viewModel: MainViewModel by viewModel()
+    override val viewModel: MainViewModel by inject()
     override val layoutId: Int
         get() = com.binhnk.retrofitwithroom.R.layout.activity_main
 
@@ -113,6 +114,10 @@ class MainActivity :
 
             confirmDeleteUser.observe(mOwner, Observer {
                 deleteUser()
+            })
+
+            getAll.observe(mOwner, Observer {
+                Utils.shortToast(mContext, "Get all")
             })
         }
 

@@ -76,6 +76,8 @@ class MainViewModel(
 
     val addUserToDBFailure = SingleLiveEvent<Unit>()
 
+    val getAll = SingleLiveEvent<Unit>()
+
     /**
      * user created
      */
@@ -105,6 +107,10 @@ class MainViewModel(
         if (page != currentPage.value) {
             currentPage.postValue(page)
         }
+    }
+
+    fun callGetAll2() {
+        getAll.call()
     }
 
     fun callRefreshCurrentPage() {
@@ -247,6 +253,7 @@ class MainViewModel(
                 run {
                     for (user in response.users) {
                         user.addedInDB = userDAO.getUserByUserId(user.id) != null
+                        Log.e("Ahihi", "${page}")
                     }
                     response.users
                 }
